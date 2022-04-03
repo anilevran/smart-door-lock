@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import axios from "axios";
+import { save, getValueFor } from "../storage.js";
 
-
-import {
-  faCircleArrowLeft
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
   StyleSheet,
   View,
@@ -17,23 +16,46 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export function Signin(props) {
-  var [email, setEmail] = useState("anil.evran7@gmail.com");
-  var [password, setPassword] = useState("1026");
+  var [email, setEmail] = useState("");
+  var [password, setPassword] = useState("");
 
-  
+  const handleSignIn = () => {
+    try {
+      axios
+        .post("http://192.168.1.33:9000/api/auth/signin", {
+          email: email,
+          password: password,
+        })
+        .then(async (result) => {
+          await save("auth-token", result.data);
+          props.navigation.navigate("MainApp");
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("Giriş yaparken hata oluştu");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <FontAwesomeIcon size={40} 
-                icon={faCircleArrowLeft }
-                />     
+        <TouchableHighlight
+          underlayColor="none"
+          onPress={() => {
+            props.navigation.navigate("Home");
+          }}
+        >
+          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+        </TouchableHighlight>
       </View>
       <View style={styles.appTitle}>
-      <View style={styles.imageContainer}>
+        <View style={styles.imageContainer}>
           <Image
             style={styles.iconStyle}
             source={require("../assets/Logo.jpeg")}
@@ -66,7 +88,7 @@ export function Signin(props) {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight underlayColor="none" >
+          <TouchableHighlight underlayColor="none" onPress={handleSignIn}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Giriş Yap</Text>
             </View>
@@ -163,5 +185,4 @@ const styles = StyleSheet.create({
     marginRight: 300,
     marginTop: 10,
   },
-  
 });

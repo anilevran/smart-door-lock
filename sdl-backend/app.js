@@ -2,6 +2,8 @@ const express = require("express");
 var cors = require("cors");
 const dotenv = require("dotenv").config({ path: __dirname + "\\.env" });
 const mongoose = require("mongoose");
+const authRouter = require("./routes/auth");
+const lockRouter = require("./routes/locks");
 
 const port = process.env.PORT;
 const mongoUri = `mongodb+srv://${process.env.DB_ADMIN}:${process.env.DB_PASS}@${process.env.DB_CLUSTERNAME}.4spmi.mongodb.net/${process.env.DB_DATABASENAME}?retryWrites=true&w=majority`;
@@ -30,6 +32,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("API WORKING PROPERLY");
 });
+
+app.use(`/api/auth`, authRouter);
+app.use(`/api/locks`, lockRouter);
 
 app.listen(port, () => {
   console.log(`App listening at port:${port}`);

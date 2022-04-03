@@ -1,14 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faCodeFork
-} from "@fortawesome/free-solid-svg-icons";
-
-
-
-
-
+import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 
 import {
   StyleSheet,
@@ -63,15 +56,9 @@ export class Home extends Component {
 
         <StatusBar style="auto" />
         <View style={styles.container}>
-        <FontAwesomeIcon
-                icon={faCodeFork}
-                
-                />
-      
-    </View>
+          <FontAwesomeIcon icon={faCodeFork} />
+        </View>
       </View>
-      
-      
     );
   }
 }

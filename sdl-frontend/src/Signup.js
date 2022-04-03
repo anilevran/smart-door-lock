@@ -11,10 +11,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faCircleArrowLeft
-} from "@fortawesome/free-solid-svg-icons";
-
+import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,18 +21,35 @@ export function Signup(props) {
   var [password, setPassword] = useState("");
   var [username, setUsername] = useState("");
 
-  
+  const handleSignUp = (props) => {
+    try {
+      axios
+        .post("http://192.168.1.33:9000/api/auth/signup", {
+          email: email,
+          password: password,
+          username: username,
+        })
+        .then(async (result) => {
+          await save("auth-token", result.data);
+          props.navigation.navigate("MainApp");
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log("Giriş yaparken hata oluştu");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <FontAwesomeIcon size={40}
-                icon={faCircleArrowLeft }
-                />
+        <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
       </View>
       <View style={styles.appTitle}>
-      <Text style={styles.Title}>Smart Door Lock</Text>
-      <View style={styles.imageContainer}>
+        <Text style={styles.Title}>Smart Door Lock</Text>
+        <View style={styles.imageContainer}>
           <Image
             style={styles.iconStyle}
             source={require("../assets/Logo.jpeg")}
@@ -80,17 +94,16 @@ export function Signup(props) {
           </View>
         </View>
         <View style={styles.formLine}>
-              <Text style={styles.label}>Confirm Password</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="************">
-                    
-                  </TextInput>
-              </View>
-            </View>
+          <Text style={styles.label}>Confirm Password</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="************"
+            ></TextInput>
+          </View>
+        </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight underlayColor="none" >
+          <TouchableHighlight underlayColor="none">
             <View style={styles.button}>
               <Text style={styles.buttonText}>Kayıt Ol</Text>
             </View>
@@ -122,12 +135,9 @@ const styles = StyleSheet.create({
   label: {
     color: "#000",
     fontSize: 15,
-    
-    
   },
-  Title:{
-      fontSize: 25,
-      
+  Title: {
+    fontSize: 25,
   },
   inputContainer: {
     width: "100%",
@@ -167,7 +177,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     marginTop: 10,
-    
   },
   iconStyle: {
     width: "100%",
@@ -177,7 +186,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     height: "40%",
-    
   },
   button: {
     width: "100%",
@@ -188,7 +196,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     top: 50,
-    
   },
   buttonText: {
     // fontFamily: "Poppins_600SemiBold",
