@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { save, getValueFor } from "../storage.js";
 import {
   StyleSheet,
   View,
@@ -24,7 +26,7 @@ export function Signup(props) {
   const handleSignUp = (props) => {
     try {
       axios
-        .post("http://192.168.1.33:9000/api/auth/signup", {
+        .post("http://192.168.1.22:9000/api/auth/signup", {
           email: email,
           password: password,
           username: username,
@@ -34,7 +36,7 @@ export function Signup(props) {
           props.navigation.navigate("MainApp");
         })
         .catch((err) => {
-          console.log(err.response);
+          console.log(err);
           console.log("Giriş yaparken hata oluştu");
         });
     } catch (error) {
@@ -45,7 +47,14 @@ export function Signup(props) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+      <TouchableHighlight
+          underlayColor="none"
+          onPress={() => {
+            props.navigation.navigate("Home");
+          }}
+        >
+          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+        </TouchableHighlight>
       </View>
       <View style={styles.appTitle}>
         <Text style={styles.Title}>Smart Door Lock</Text>
@@ -103,7 +112,8 @@ export function Signup(props) {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight underlayColor="none">
+          <TouchableHighlight underlayColor="none" onPress={handleSignUp}>
+            
             <View style={styles.button}>
               <Text style={styles.buttonText}>Kayıt Ol</Text>
             </View>

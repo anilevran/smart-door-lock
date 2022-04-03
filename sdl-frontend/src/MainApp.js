@@ -24,7 +24,7 @@ export function MainApp(props) {
   const getlocks = async () => {
     try {
       axios
-        .get("http://192.168.1.33:9000/api/locks", {
+        .get("http://192.168.1.22:9000/api/locks", {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },

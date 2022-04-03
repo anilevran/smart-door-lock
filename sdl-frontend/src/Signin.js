@@ -25,7 +25,7 @@ export function Signin(props) {
   const handleSignIn = () => {
     try {
       axios
-        .post("http://192.168.1.33:9000/api/auth/signin", {
+        .post("http://192.168.1.22:9000/api/auth/signin", {
           email: email,
           password: password,
         })
