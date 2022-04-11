@@ -21,7 +21,7 @@ import { StatusBar } from "expo-status-bar";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export function MainApp(props) {
+export function LockDetail(props) {
   var [isAuthed, setAuthed] = useState(false);
   const getlocks = async () => {
     try {
@@ -58,23 +58,30 @@ export function MainApp(props) {
     <>
       {isAuthed ? (
         <View style={styles.container}>
-          <TouchableHighlight underlayColor="none" onPress={handleLogout}>
-            <View style={styles.logoutContainer}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </View>
-          </TouchableHighlight>
-          <View style={styles.keyContainer}>
-            <View style={styles.keyButton}><Text style={styles.keyText}>Lock Number #1</Text></View>
-            <View style={styles.keyButton}><Text style={styles.keyText}>Lock Number #1</Text></View>
-            <View style={styles.keyButton}><Text style={styles.keyText}>Lock Number #1</Text></View>
-            <View style={styles.keyButton}><Text style={styles.keyText}>Lock Number #1</Text></View>
-            <View style={styles.keyButton}><Text style={styles.keyText}>Lock Number #1</Text></View> 
+          <View style={styles.iconContainer}>
+        <TouchableHighlight
+          underlayColor="none"
+          onPress={() => {
+            props.navigation.navigate("MainApp");
+          }}
+        >
+          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+        </TouchableHighlight>
+      </View>
+          <View style={styles.keyNameContainer}>
+            <Text style={styles.keyLabel}>Key Name Here</Text>
           </View>
-          <TouchableHighlight>
-              <View style={styles.newLockContainer}>
-                <Text style={styles.newLockButton}>Attach New Lock</Text>
-              </View>
-            </TouchableHighlight>
+          <View style={styles.detailContainer}>
+              <Text style={styles.batteryLabel}>Battery</Text>
+              <Text style={styles.batteryLabel}>Battery</Text>
+          </View>
+          <View style={styles.optionsContainer}>
+            <Text style={styles.optionLabel}>Unlock</Text>
+            <Text style={styles.optionLabel}>MonitorLogs</Text>
+            <Text style={styles.optionLabel}>Create key for guests</Text>
+
+          </View>
+          
         </View>
       ) : (
         <View style={styles.container}>
@@ -106,60 +113,42 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
   },
-  logoutText:{
-    fontSize: 15,
-    color: "white",
-  },
-  logoutContainer: {
-    width: 70,
-    height: 30,
+  keyNameContainer:{
     display: "flex",
-    alignItems: "center",
-    justifyContent:"center",
-    borderRadius: 10,
-    backgroundColor: "#000",
-    marginTop: 30,
-    marginLeft: 340,
-  },
-  keyContainer:{
-    backgroundColor:"blue",
-    width: windowWidth,
-    height:550,
-    marginTop: 10,
-    display: "flex",
-    flexDirection: "row",
-    flexWrap:"wrap",
-     
-
-  },
-  keyButton:{
-    backgroundColor: "black",
-    width: 100,
-    height: 100,
-    display: "flex",
-    marginLeft: 30,
-    marginTop: 30,
-    borderRadius: 20,
     alignItems:"center",
-  },
-  keyText:{
-    color: "white",
-    marginTop:10,
-
-  },
-  newLockContainer:{
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    borderRadius: 30,
     width: 300,
     height: 100,
-    marginLeft: 55,
-    borderRadius: 100,
-    backgroundColor:"#000"
-    
+    marginLeft:55,
+
   },
-  newLockButton:{
-    color:"white",
-    fontSize: 30,
+  keyLabel:{
+      fontSize: 30,
   },
+  optionsContainer:{
+    display:"flex",
+    backgroundColor:"white",
+    flexDirection:"column",
+    alignItems:"center",
+    justifyContent:"space-between",
+    width: windowWidth,
+    marginTop: 350,
+    height:150,
+
+  },
+  optionLabel:{
+    display:"flex",
+    fontSize:20,
+    backgroundColor:"red",
+    alignItems:"center",
+    justifyContent:"center",
+    width:200,
+  },
+  iconContainer:{
+    marginTop:30,
+    marginLeft:10,
+  }
 });
+
