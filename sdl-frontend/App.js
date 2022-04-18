@@ -16,7 +16,7 @@ export default function App(props) {
     <>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="LockDetail"
+          initialRouteName="Home"
           headerMode={{
             headerShown: false,
           }}
@@ -28,7 +28,6 @@ export default function App(props) {
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
               <Stack.Screen name="LockDetail" component={LockDetail} />
-              
             </>
           ) : (
             <>
@@ -36,8 +35,6 @@ export default function App(props) {
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
               <Stack.Screen name="LockDetail" component={LockDetail} />
-              
-              
             </>
           )}
         </Stack.Navigator>

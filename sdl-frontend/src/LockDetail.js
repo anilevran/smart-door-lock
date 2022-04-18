@@ -26,7 +26,7 @@ export function LockDetail(props) {
   const getlocks = async () => {
     try {
       axios
-        .get("http://192.168.1.22:9000/api/locks", {
+        .get("http://192.168.1.33:9000/api/locks", {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -59,36 +59,33 @@ export function LockDetail(props) {
       {isAuthed ? (
         <View style={styles.container}>
           <View style={styles.iconContainer}>
-        <TouchableHighlight
-          underlayColor="none"
-          onPress={() => {
-            props.navigation.navigate("MainApp");
-          }}
-        >
-          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
-        </TouchableHighlight>
-      </View>
+            <TouchableHighlight
+              underlayColor="none"
+              onPress={() => {
+                props.navigation.navigate("MainApp");
+              }}
+            >
+              <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+            </TouchableHighlight>
+          </View>
           <View style={styles.keyNameContainer}>
             <Text style={styles.keyLabel}>Key Name Here</Text>
           </View>
           <View style={styles.detailContainer}>
-              <Text style={styles.batteryLabel}>Battery</Text>
-              <Text style={styles.batteryLabel}>Battery</Text>
+            <Text style={styles.batteryLabel}>Battery</Text>
+            <Text style={styles.batteryLabel}>Battery</Text>
           </View>
           <View style={styles.optionsContainer}>
             <Text style={styles.optionLabel}>Unlock</Text>
             <Text style={styles.optionLabel}>MonitorLogs</Text>
             <Text style={styles.optionLabel}>Create key for guests</Text>
-
           </View>
-          
         </View>
       ) : (
         <View style={styles.container}>
           <View style={styles.inner}>
             <Text style={styles.text}>Not Authorized</Text>
           </View>
-          
         </View>
       )}
     </>
@@ -100,9 +97,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
     backgroundColor: "#FF4500",
-    display:"flex",
-    
-
+    display: "flex",
   },
   inner: {
     width: 100,
@@ -113,42 +108,39 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
   },
-  keyNameContainer:{
+  keyNameContainer: {
     display: "flex",
-    alignItems:"center",
+    alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
     borderRadius: 30,
     width: 300,
     height: 100,
-    marginLeft:55,
-
+    marginLeft: 55,
   },
-  keyLabel:{
-      fontSize: 30,
+  keyLabel: {
+    fontSize: 30,
   },
-  optionsContainer:{
-    display:"flex",
-    backgroundColor:"white",
-    flexDirection:"column",
-    alignItems:"center",
-    justifyContent:"space-between",
+  optionsContainer: {
+    display: "flex",
+    backgroundColor: "white",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
     width: windowWidth,
     marginTop: 350,
-    height:150,
-
+    height: 150,
   },
-  optionLabel:{
-    display:"flex",
-    fontSize:20,
-    backgroundColor:"red",
-    alignItems:"center",
-    justifyContent:"center",
-    width:200,
+  optionLabel: {
+    display: "flex",
+    fontSize: 20,
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 200,
   },
-  iconContainer:{
-    marginTop:30,
-    marginLeft:10,
-  }
+  iconContainer: {
+    marginTop: 30,
+    marginLeft: 10,
+  },
 });
-

@@ -1,8 +1,10 @@
 const router = require("express").Router();
-const User = require("../models/user.js");
+const User = require("../models/User.js");
+const Lock = require("../models/Lock.js");
 const jwt = require("jsonwebtoken");
 const { registerValidation, loginValidation } = require("../validation");
 const bcrypt = require("bcryptjs");
+const verify = require("./verifyToken");
 
 router.post("/signin", async (req, res) => {
   //Is Form Valid

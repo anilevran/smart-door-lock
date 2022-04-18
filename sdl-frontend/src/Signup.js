@@ -26,7 +26,7 @@ export function Signup(props) {
   const handleSignUp = (props) => {
     try {
       axios
-        .post("http://192.168.1.22:9000/api/auth/signup", {
+        .post("http://192.168.1.33:9000/api/auth/signup", {
           email: email,
           password: password,
           username: username,
@@ -47,7 +47,7 @@ export function Signup(props) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-      <TouchableHighlight
+        <TouchableHighlight
           underlayColor="none"
           onPress={() => {
             props.navigation.navigate("Home");
@@ -113,7 +113,6 @@ export function Signup(props) {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableHighlight underlayColor="none" onPress={handleSignUp}>
-            
             <View style={styles.button}>
               <Text style={styles.buttonText}>Kayıt Ol</Text>
             </View>
