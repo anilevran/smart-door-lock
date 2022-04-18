@@ -6,6 +6,7 @@ import { Home } from "./src/Home.js";
 import { Signup } from "./src/Signup.js";
 import { Signin } from "./src/Signin.js";
 import { MainApp } from "./src/MainApp.js";
+import { LockDetail } from "./src/LockDetail.js";
 import { save, getValueFor } from "./storage.js";
 
 const Stack = createStackNavigator();
@@ -26,12 +27,14 @@ export default function App(props) {
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
+              <Stack.Screen name="LockDetail" component={LockDetail} />
             </>
           ) : (
             <>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
+              <Stack.Screen name="LockDetail" component={LockDetail} />
             </>
           )}
         </Stack.Navigator>
