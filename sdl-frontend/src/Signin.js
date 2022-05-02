@@ -25,7 +25,7 @@ export function Signin(props) {
   const handleSignIn = () => {
     try {
       axios
-        .post("http://192.168.1.33:9000/api/auth/signin", {
+        .post("http://192.168.1.22:9000/api/auth/signin", {
           email: email,
           password: password,
         })
@@ -44,6 +44,7 @@ export function Signin(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
       <View style={styles.iconContainer}>
         <TouchableHighlight
           underlayColor="none"
@@ -51,9 +52,11 @@ export function Signin(props) {
             props.navigation.navigate("Home");
           }}
         >
-          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+          <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
         </TouchableHighlight>
       </View>
+      </View>
+      <View style={styles.body}>
       <View style={styles.appTitle}>
         <View style={styles.imageContainer}>
           <Image
@@ -68,7 +71,7 @@ export function Signin(props) {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="anil.evran7@gmail.com"
+              placeholder="xxxxxxxx@gmail.com"
               onChangeText={(text) => setEmail(text)}
             >
               {email}
@@ -95,9 +98,12 @@ export function Signin(props) {
           </TouchableHighlight>
         </View>
       </View>
-
+      </View>
+      <View style={styles.footer}>
+      </View>
       <StatusBar style="auto" />
     </View>
+    
   );
 }
 
@@ -116,6 +122,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 18,
     color: "#6A6565",
+    
   },
   label: {
     color: "#000",
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     height: "60%",
-    backgroundColor: "#E5E4E1",
+    backgroundColor: "white",
     borderBottomWidth: 4,
     borderColor: "#000",
     display: "flex",
@@ -135,11 +142,11 @@ const styles = StyleSheet.create({
   container: {
     width: windowWidth,
     height: windowHeight,
-    backgroundColor: "#FF4500",
+    backgroundColor: "#1D94AD",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 30,
+    
   },
   appTitle: {
     width: 300,
@@ -168,7 +175,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     height: "50%",
-    backgroundColor: "#6A5ACD",
+    backgroundColor: "#FFA04D",
     borderRadius: 50,
     display: "flex",
     alignItems: "center",
@@ -182,7 +189,39 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     display: "flex",
-    marginRight: 300,
-    marginTop: 10,
+    
+  },
+  body: {
+    backgroundColor: "#1D94AD",
+    width: windowWidth,
+    height: windowHeight * 75 /100,
+    display: "flex",
+    flexDirection: "column",
+    alignItems:"center",
+
+    
+    
+  },
+  
+  header: {
+    paddingHorizontal: 10,
+    justifyContent:"flex-start",
+    alignItems:"center",
+    flexDirection: "row",
+    width: windowWidth,
+    height:windowHeight* 5 / 100,
+    backgroundColor: "#1D94AD",
+    marginTop:20,
+    
+  },
+  footer: {
+    width: windowWidth,
+    height: (windowHeight * 20 /100)-20 ,
+    backgroundColor: "#1D94AD",
+    flexDirection: "row",
+    alignItems:"center",
+
+    
+
   },
 });

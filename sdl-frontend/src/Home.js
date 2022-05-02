@@ -24,6 +24,9 @@ export class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.header}>
+          </View>
+          <View style={styles.body}>
         <View style={styles.appTitle}>
           <View style={styles.imageContainer}>
             <Image
@@ -34,7 +37,8 @@ export class Home extends Component {
 
           <Text style={styles.text}>Smart Door Lock</Text>
         </View>
-
+        
+        
         <View style={styles.buttonContainer}>
           <TouchableHighlight
             underlayColor="none"
@@ -53,11 +57,13 @@ export class Home extends Component {
             </View>
           </TouchableHighlight>
         </View>
-
-        <StatusBar style="auto" />
-        <View style={styles.container}>
-          <FontAwesomeIcon icon={faCodeFork} />
         </View>
+        <View style={styles.footer}>
+        <StatusBar style="auto" />
+        
+          <FontAwesomeIcon icon={faCodeFork} />
+        
+      </View>
       </View>
     );
   }
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   container: {
     width: windowWidth,
     height: windowHeight,
-    backgroundColor: "#FF6600",
+    backgroundColor: "#1D94AD",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -77,7 +83,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
-    marginTop: 100,
     display: "flex",
     alignItems: "center",
   },
@@ -111,15 +116,48 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "55%",
     borderWidth: 2,
-    borderColor: "#FFF",
+    borderColor: "#211940",
     borderRadius: 50,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor:"#FFA04D"
   },
   buttonText: {
     // fontFamily: "Poppins_600SemiBold",
     fontSize: 18,
     color: "#FFF",
   },
+  body: {
+    backgroundColor: "#1D94AD",
+    width: windowWidth,
+    height: windowHeight * 75 /100,
+    display: "flex",
+    flexDirection: "column",
+    alignItems:"center",
+    justifyContent:"center",
+
+    
+  },header: {
+    paddingHorizontal: 10,
+    justifyContent:"flex-end",
+    alignItems:"center",
+    flexDirection: "row",
+    width: windowWidth,
+    height:windowHeight* 5 / 100,
+    marginTop: 20,
+    backgroundColor: "#1D94AD",
+    
+    
+  },
+  footer: {
+    width: windowWidth,
+    height: (windowHeight * 20 /100)-20 ,
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems:"center",
+    justifyContent:"center",
+    backgroundColor: "#1D94AD",
+
+  }
 });
