@@ -29,7 +29,7 @@ export function MainApp(props) {
   const getLocks = async () => {
     try {
       const result = await axios.get(
-        "http://192.168.1.22:9000/api/locks/getLocks",
+        "http://192.168.1.33:9000/api/locks/getLocks",
         {
           headers: {
             "auth-token": await getValueFor("auth-token"),
@@ -50,10 +50,16 @@ export function MainApp(props) {
     props.navigation.navigate("Home");
   };
 
-  const KeyButton = (props2) => {
+  const KeyButton = (props_inner) => {
     return (
-      <TouchableHighlight underlayColor="none" onPress={()=> props.navigation.navigate("LockDetail")} style={styles.keyButton}>
-        <Text style={styles.keyText}>{props2.name}</Text>
+      <TouchableHighlight
+        underlayColor="none"
+        onPress={() =>
+          props.navigation.navigate("LockDetail", { lockId: props_inner.id })
+        }
+        style={styles.keyButton}
+      >
+        <Text style={styles.keyText}>{props_inner.name}</Text>
       </TouchableHighlight>
     );
   };
@@ -67,25 +73,25 @@ export function MainApp(props) {
       {isAuthed ? (
         <View style={styles.container}>
           <View style={styles.header}>
-          <TouchableHighlight underlayColor="none" onPress={handleLogout}>
-            <View style={styles.logoutContainer}>
-              <Text style={styles.logoutText}>Logout</Text>
-            </View>
-          </TouchableHighlight>
+            <TouchableHighlight underlayColor="none" onPress={handleLogout}>
+              <View style={styles.logoutContainer}>
+                <Text style={styles.logoutText}>Logout</Text>
+              </View>
+            </TouchableHighlight>
           </View>
           <View style={styles.body}>
-          <View style={styles.keyContainer}>
-            {locks.map((lock, index) => {
-              return <KeyButton key={index} name={lock.name} />;
-            })}
-          </View>
+            <View style={styles.keyContainer}>
+              {locks.map((lock, index) => {
+                return <KeyButton key={index} id={lock.id} name={lock.name} />;
+              })}
+            </View>
           </View>
           <View style={styles.footer}>
-          <TouchableHighlight>
-            <View style={styles.newLockContainer}>
-              <Text style={styles.newLockButton}>Attach New Lock</Text>
-            </View>
-          </TouchableHighlight>
+            <TouchableHighlight>
+              <View style={styles.newLockContainer}>
+                <Text style={styles.newLockButton}>Attach New Lock</Text>
+              </View>
+            </TouchableHighlight>
           </View>
         </View>
       ) : (
@@ -127,22 +133,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     backgroundColor: "#FFA04D",
-    
-    
-    
   },
   keyContainer: {
-    
     width: windowWidth,
-    height: windowHeight * 75 /100,
+    height: (windowHeight * 75) / 100,
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
   },
   keyButton: {
     backgroundColor: "#FFA04D",
-    borderWidth:1,
-    borderColor:"white",
+    borderWidth: 1,
+    borderColor: "white",
     width: 100,
     height: 100,
     display: "flex",
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 20,
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
   },
   keyText: {
     color: "black",
@@ -171,32 +173,26 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 10,
-    justifyContent:"flex-end",
-    alignItems:"center",
+    justifyContent: "flex-end",
+    alignItems: "center",
     flexDirection: "row",
     width: windowWidth,
-    height:windowHeight* 5 / 100,
+    height: (windowHeight * 5) / 100,
     marginTop: 20,
-    backgroundColor:"#1D94AD",
-    
-    
+    backgroundColor: "#1D94AD",
   },
   footer: {
     width: windowWidth,
-    height: (windowHeight * 20 /100)-20 ,
+    height: (windowHeight * 20) / 100 - 20,
     backgroundColor: "#1D94AD",
     flexDirection: "row",
-    alignItems:"center",
-
-    
-
+    alignItems: "center",
   },
   body: {
     backgroundColor: "#1D94AD",
     width: windowWidth,
-    height: windowHeight * 75 /100,
+    height: (windowHeight * 75) / 100,
     display: "flex",
     flexDirection: "column",
-    
   },
 });

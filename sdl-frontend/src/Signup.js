@@ -26,7 +26,7 @@ export function Signup(props) {
   const handleSignUp = (props) => {
     try {
       axios
-        .post("http://192.168.1.22:9000/api/auth/signup", {
+        .post("http://192.168.1.33:9000/api/auth/signup", {
           email: email,
           password: password,
           username: username,
@@ -47,81 +47,81 @@ export function Signup(props) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <View style={styles.iconContainer}>
-        <TouchableHighlight
-          underlayColor="none"
-          onPress={() => {
-            props.navigation.navigate("Home");
-          }}
-        >
-          <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
-        </TouchableHighlight>
-      </View>
-      </View>
-      <View style={styles.body}>
-      <View style={styles.appTitle}>
-        <Text style={styles.Title}>Smart Door Lock</Text>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.iconStyle}
-            source={require("../assets/Logo.jpeg")}
-          />
-        </View>
-      </View>
-      <View style={styles.formContainer}>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>User Name</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Display Name"
-              onChangeText={(text) => setUsername(text)}
-            >
-              {username}
-            </TextInput>
-          </View>
-        </View>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>Email</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="xxx@gmail.com"
-              onChangeText={(text) => setEmail(text)}
-            >
-              {email}
-            </TextInput>
-          </View>
-        </View>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>Şifre</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="*********"
-              onChangeText={(text) => setPassword(text)}
-            >
-              {password}
-            </TextInput>
-          </View>
-        </View>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>Confirm Password</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="************"
-            ></TextInput>
-          </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableHighlight underlayColor="none" onPress={handleSignUp}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Kayıt Ol</Text>
-            </View>
+        <View style={styles.iconContainer}>
+          <TouchableHighlight
+            underlayColor="none"
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
+          >
+            <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
           </TouchableHighlight>
         </View>
       </View>
+      <View style={styles.body}>
+        <View style={styles.appTitle}>
+          <Text style={styles.Title}>Smart Door Lock</Text>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.iconStyle}
+              source={require("../assets/Logo.jpeg")}
+            />
+          </View>
+        </View>
+        <View style={styles.formContainer}>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>User Name</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Display Name"
+                onChangeText={(text) => setUsername(text)}
+              >
+                {username}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>Email</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="xxx@gmail.com"
+                onChangeText={(text) => setEmail(text)}
+              >
+                {email}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>Şifre</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="*********"
+                onChangeText={(text) => setPassword(text)}
+              >
+                {password}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>Confirm Password</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="************"
+              ></TextInput>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableHighlight underlayColor="none" onPress={handleSignUp}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Kayıt Ol</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        </View>
       </View>
       <View style={styles.footer}></View>
       <StatusBar style="auto" />
@@ -171,13 +171,12 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    
   },
   appTitle: {
     width: 300,
     height: 200,
     padding: 10,
-    
+
     display: "flex",
     alignItems: "center",
     //borderRadius:10,
@@ -217,40 +216,33 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     display: "flex",
-    
-    
   },
   body: {
     backgroundColor: "#1D94AD",
     width: windowWidth,
-    height: windowHeight * 80 /100,
+    height: (windowHeight * 80) / 100,
     display: "flex",
     flexDirection: "column",
-    alignItems:"center",
-    
+    alignItems: "center",
   },
   header: {
     paddingHorizontal: 10,
-    justifyContent:"flex-start",
-    alignItems:"flex-start",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     flexDirection: "row",
     width: windowWidth,
-    height:windowHeight* 10 / 100,
+    height: (windowHeight * 10) / 100,
     marginTop: 20,
-  
-    backgroundColor:"#1D94AD"
-    
-    
+
+    backgroundColor: "#1D94AD",
   },
   footer: {
     width: windowWidth,
-    height: (windowHeight * 10 /100)-20 ,
+    height: (windowHeight * 10) / 100 - 20,
     backgroundColor: "white",
     flexDirection: "row",
-    alignItems:"center",
-    justifyContent:"center",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#1D94AD",
-
-  }
-  
+  },
 });

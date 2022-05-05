@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
-import { save, getValueFor, deleteItem } from "../storage.js";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import React, { useEffect, useState } from "react";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
 import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
   StyleSheet,
@@ -15,17 +14,19 @@ import {
   TouchableHighlight,
   Alert,
   Button,
+  FlatList,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { save, getValueFor, deleteItem } from "../storage.js";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export function LockDetail(props) {
-  var [isAuthed, setAuthed] = useState(true);
+export function ViewLogs(props) {
+  const [isAuthed, setAuthed] = useState(false);
   var [keyName, setkeyName] = useState(null);
 
-  const getLock = async () => {
+  const getLocks = async () => {
     const body = {
       id: props.route.params.lockId,
     };
@@ -47,16 +48,11 @@ export function LockDetail(props) {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleLogout = async () => {
-    setAuthed(false);
-    await deleteItem("auth-token");
-    props.navigation.navigate("Home");
+    setAuthed(true);
   };
 
   useEffect(() => {
-    getLock();
+    getLocks();
   }, []);
 
   return (
@@ -79,49 +75,58 @@ export function LockDetail(props) {
             <View style={styles.keyNameContainer}>
               <Text style={styles.keyLabel}>{keyName}</Text>
             </View>
-            <View style={styles.detailContainer}>
-              <View style={styles.formLine}>
-                <View style={styles.formLabel}>
-                  <Text style={styles.textStyle}>Battery:</Text>
-                </View>
-                <View style={styles.formValue}>
-                  <Text style={styles.textStyle}>100%</Text>
-                </View>
+            <View style={styles.logLabel}></View>
+            <View style={styles.table}>
+              <View style={styles.tableDesc}>
+                <Text style={styles.tableDescText}>Date</Text>
+                <Text style={styles.tableDescText}>User</Text>
               </View>
-              <View style={styles.formLine}>
-                <View style={styles.formLabel}>
-                  <Text style={styles.textStyle}>Last Entry:</Text>
-                </View>
-                <View style={styles.formValue}>
-                  <Text style={styles.textStyle}></Text>
-                </View>
+              <View style={styles.tableRows}>
+                <FlatList
+                  data={[
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                    { key: "Devin-12/03/2020-12:23" },
+                  ]}
+                  renderItem={({ item }) => (
+                    <>
+                      <View style={styles.row}>
+                        <View style={styles.rowLabel}>
+                          <Text style={styles.tableDescText}>
+                            {item.key.split("-")[1]} - {item.key.split("-")[2]}
+                          </Text>
+                        </View>
+                        <View style={styles.rowValue}>
+                          <Text style={styles.tableDescText}>
+                            {item.key.split("-")[0]}
+                          </Text>
+                        </View>
+                      </View>
+                    </>
+                  )}
+                />
               </View>
-            </View>
-            <View style={styles.optionsContainer}>
-              <TouchableHighlight style={styles.optionLabel}>
-                <Text style={styles.optionText}>Unlock</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                onPress={() => {
-                  props.navigation.navigate("ViewLogs", {
-                    lockId: props.route.params.lockId,
-                  });
-                }}
-                style={styles.optionLabel}
-              >
-                <Text style={styles.optionText}>MonitorLogs</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={styles.optionLabel}
-                onPress={() => {
-                  props.navigation.navigate("AssignKey");
-                }}
-              >
-                <Text style={styles.optionText}>Create key for guests</Text>
-              </TouchableHighlight>
             </View>
           </View>
-          <View style={styles.footer}></View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -230,5 +235,40 @@ const styles = StyleSheet.create({
     backgroundColor: "#1D94AD",
     flexDirection: "row",
     alignItems: "center",
+  },
+  logLabel: {
+    width: windowWidth,
+    height: 50,
+  },
+  table: {
+    width: windowWidth,
+    height: "70%",
+  },
+  tableDesc: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 100,
+  },
+  tableDescText: {
+    fontSize: 20,
+  },
+  tableRows: {
+    marginTop: 20,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 15,
+    marginVertical: 10,
+    paddingBottom: 3,
+    borderBottomWidth: 2,
+  },
+  rowLabel: {
+    width: "60%",
+    paddingLeft: 30,
+  },
+  rowValue: {
+    paddingLeft: 20,
+    width: "40%",
   },
 });

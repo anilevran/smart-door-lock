@@ -28,6 +28,7 @@ router.get("/getLocks", verify, async (req, res) => {
   const someFunc = async (id) => {
     let lock = await Lock.findById(id);
     let responseObj = {
+      id: lock._id,
       name: lock.name,
       isLocked: lock.isLocked,
     };
@@ -41,6 +42,19 @@ router.get("/getLocks", verify, async (req, res) => {
   user.permissions.forEach((id) => {
     someFunc(id);
   });
+});
+
+router.post("/getLock", verify, async (req, res) => {
+  const token = req.header("auth-token");
+  if (!token) return res.status(401).send("Access Denied");
+
+  let lock = await Lock.findById(req.body.id);
+  let responseObj = {
+    id: lock._id,
+    name: lock.name,
+    isLocked: lock.isLocked,
+  };
+  res.send(responseObj);
 });
 
 router.get("/setLocks", verify, async (req, res) => {

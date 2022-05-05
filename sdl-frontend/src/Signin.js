@@ -25,7 +25,7 @@ export function Signin(props) {
   const handleSignIn = () => {
     try {
       axios
-        .post("http://192.168.1.22:9000/api/auth/signin", {
+        .post("http://192.168.1.33:9000/api/auth/signin", {
           email: email,
           password: password,
         })
@@ -45,65 +45,63 @@ export function Signin(props) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <View style={styles.iconContainer}>
-        <TouchableHighlight
-          underlayColor="none"
-          onPress={() => {
-            props.navigation.navigate("Home");
-          }}
-        >
-          <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
-        </TouchableHighlight>
-      </View>
-      </View>
-      <View style={styles.body}>
-      <View style={styles.appTitle}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.iconStyle}
-            source={require("../assets/Logo.jpeg")}
-          />
-        </View>
-      </View>
-      <View style={styles.formContainer}>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>E-mail</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="xxxxxxxx@gmail.com"
-              onChangeText={(text) => setEmail(text)}
-            >
-              {email}
-            </TextInput>
-          </View>
-        </View>
-        <View style={styles.formLine}>
-          <Text style={styles.label}>Şifre</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="* * * * * * * *"
-              onChangeText={(text) => setPassword(text)}
-            >
-              {password}
-            </TextInput>
-          </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableHighlight underlayColor="none" onPress={handleSignIn}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Giriş Yap</Text>
-            </View>
+        <View style={styles.iconContainer}>
+          <TouchableHighlight
+            underlayColor="none"
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
+          >
+            <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
           </TouchableHighlight>
         </View>
       </View>
+      <View style={styles.body}>
+        <View style={styles.appTitle}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.iconStyle}
+              source={require("../assets/Logo.jpeg")}
+            />
+          </View>
+        </View>
+        <View style={styles.formContainer}>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>E-mail</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="xxxxxxxx@gmail.com"
+                onChangeText={(text) => setEmail(text)}
+              >
+                {email}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.formLine}>
+            <Text style={styles.label}>Şifre</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="* * * * * * * *"
+                onChangeText={(text) => setPassword(text)}
+              >
+                {password}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableHighlight underlayColor="none" onPress={handleSignIn}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Giriş Yap</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        </View>
       </View>
-      <View style={styles.footer}>
-      </View>
+      <View style={styles.footer}></View>
       <StatusBar style="auto" />
     </View>
-    
   );
 }
 
@@ -122,7 +120,6 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 18,
     color: "#6A6565",
-    
   },
   label: {
     color: "#000",
@@ -146,7 +143,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    
   },
   appTitle: {
     width: 300,
@@ -189,39 +185,31 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     display: "flex",
-    
   },
   body: {
     backgroundColor: "#1D94AD",
     width: windowWidth,
-    height: windowHeight * 75 /100,
+    height: (windowHeight * 75) / 100,
     display: "flex",
     flexDirection: "column",
-    alignItems:"center",
-
-    
-    
+    alignItems: "center",
   },
-  
+
   header: {
     paddingHorizontal: 10,
-    justifyContent:"flex-start",
-    alignItems:"center",
+    justifyContent: "flex-start",
+    alignItems: "center",
     flexDirection: "row",
     width: windowWidth,
-    height:windowHeight* 5 / 100,
+    height: (windowHeight * 5) / 100,
     backgroundColor: "#1D94AD",
-    marginTop:20,
-    
+    marginTop: 20,
   },
   footer: {
     width: windowWidth,
-    height: (windowHeight * 20 /100)-20 ,
+    height: (windowHeight * 20) / 100 - 20,
     backgroundColor: "#1D94AD",
     flexDirection: "row",
-    alignItems:"center",
-
-    
-
+    alignItems: "center",
   },
 });
