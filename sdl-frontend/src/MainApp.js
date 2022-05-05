@@ -29,7 +29,7 @@ export function MainApp(props) {
   const getLocks = async () => {
     try {
       const result = await axios.get(
-        "http://192.168.1.33:9000/api/locks/getLocks",
+        "http://192.168.1.22:9000/api/locks/getLocks",
         {
           headers: {
             "auth-token": await getValueFor("auth-token"),
@@ -50,11 +50,11 @@ export function MainApp(props) {
     props.navigation.navigate("Home");
   };
 
-  const KeyButton = (props) => {
+  const KeyButton = (props2) => {
     return (
-      <View style={styles.keyButton}>
-        <Text style={styles.keyText}>{props.name}</Text>
-      </View>
+      <TouchableHighlight underlayColor="none" onPress={()=> props.navigation.navigate("LockDetail")} style={styles.keyButton}>
+        <Text style={styles.keyText}>{props2.name}</Text>
+      </TouchableHighlight>
     );
   };
 
@@ -66,21 +66,27 @@ export function MainApp(props) {
     <>
       {isAuthed ? (
         <View style={styles.container}>
+          <View style={styles.header}>
           <TouchableHighlight underlayColor="none" onPress={handleLogout}>
             <View style={styles.logoutContainer}>
               <Text style={styles.logoutText}>Logout</Text>
             </View>
           </TouchableHighlight>
+          </View>
+          <View style={styles.body}>
           <View style={styles.keyContainer}>
             {locks.map((lock, index) => {
               return <KeyButton key={index} name={lock.name} />;
             })}
           </View>
+          </View>
+          <View style={styles.footer}>
           <TouchableHighlight>
             <View style={styles.newLockContainer}>
               <Text style={styles.newLockButton}>Attach New Lock</Text>
             </View>
           </TouchableHighlight>
+          </View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -97,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     width: windowWidth,
     height: windowHeight,
-    backgroundColor: "#FF4500",
+    backgroundColor: "#1D94AD",
     display: "flex",
   },
   inner: {
@@ -111,7 +117,7 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     fontSize: 15,
-    color: "white",
+    color: "black",
   },
   logoutContainer: {
     width: 70,
@@ -120,21 +126,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    backgroundColor: "#000",
-    marginTop: 30,
-    marginLeft: 340,
+    backgroundColor: "#FFA04D",
+    
+    
+    
   },
   keyContainer: {
-    backgroundColor: "blue",
+    
     width: windowWidth,
-    height: 550,
-    marginTop: 10,
+    height: windowHeight * 75 /100,
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
   },
   keyButton: {
-    backgroundColor: "black",
+    backgroundColor: "#FFA04D",
+    borderWidth:1,
+    borderColor:"white",
     width: 100,
     height: 100,
     display: "flex",
@@ -142,10 +150,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 20,
     alignItems: "center",
+    justifyContent:"center",
   },
   keyText: {
-    color: "white",
-    marginTop: 10,
+    color: "black",
   },
   newLockContainer: {
     display: "flex",
@@ -155,10 +163,40 @@ const styles = StyleSheet.create({
     height: 100,
     marginLeft: 55,
     borderRadius: 100,
-    backgroundColor: "#000",
+    backgroundColor: "#FFA04D",
   },
   newLockButton: {
-    color: "white",
+    color: "black",
     fontSize: 30,
+  },
+  header: {
+    paddingHorizontal: 10,
+    justifyContent:"flex-end",
+    alignItems:"center",
+    flexDirection: "row",
+    width: windowWidth,
+    height:windowHeight* 5 / 100,
+    marginTop: 20,
+    backgroundColor:"#1D94AD",
+    
+    
+  },
+  footer: {
+    width: windowWidth,
+    height: (windowHeight * 20 /100)-20 ,
+    backgroundColor: "#1D94AD",
+    flexDirection: "row",
+    alignItems:"center",
+
+    
+
+  },
+  body: {
+    backgroundColor: "#1D94AD",
+    width: windowWidth,
+    height: windowHeight * 75 /100,
+    display: "flex",
+    flexDirection: "column",
+    
   },
 });

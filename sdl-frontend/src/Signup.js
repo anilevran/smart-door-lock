@@ -26,7 +26,7 @@ export function Signup(props) {
   const handleSignUp = (props) => {
     try {
       axios
-        .post("http://192.168.1.33:9000/api/auth/signup", {
+        .post("http://192.168.1.22:9000/api/auth/signup", {
           email: email,
           password: password,
           username: username,
@@ -46,6 +46,7 @@ export function Signup(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
       <View style={styles.iconContainer}>
         <TouchableHighlight
           underlayColor="none"
@@ -53,9 +54,11 @@ export function Signup(props) {
             props.navigation.navigate("Home");
           }}
         >
-          <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
+          <FontAwesomeIcon size={35} icon={faCircleArrowLeft} />
         </TouchableHighlight>
       </View>
+      </View>
+      <View style={styles.body}>
       <View style={styles.appTitle}>
         <Text style={styles.Title}>Smart Door Lock</Text>
         <View style={styles.imageContainer}>
@@ -119,7 +122,8 @@ export function Signup(props) {
           </TouchableHighlight>
         </View>
       </View>
-
+      </View>
+      <View style={styles.footer}></View>
       <StatusBar style="auto" />
     </View>
   );
@@ -163,17 +167,17 @@ const styles = StyleSheet.create({
   container: {
     width: windowWidth,
     height: windowHeight,
-    backgroundColor: "#FF4500",
+    backgroundColor: "#1D94AD",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 30,
+    
   },
   appTitle: {
     width: 300,
     height: 200,
     padding: 10,
-    marginTop: 35,
+    
     display: "flex",
     alignItems: "center",
     //borderRadius:10,
@@ -199,12 +203,12 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     height: "50%",
-    backgroundColor: "#6A5ACD",
+    backgroundColor: "#FFA04D",
     borderRadius: 50,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    top: 50,
+    top: 30,
   },
   buttonText: {
     // fontFamily: "Poppins_600SemiBold",
@@ -213,7 +217,40 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     display: "flex",
-    marginRight: 300,
-    marginTop: 10,
+    
+    
   },
+  body: {
+    backgroundColor: "#1D94AD",
+    width: windowWidth,
+    height: windowHeight * 80 /100,
+    display: "flex",
+    flexDirection: "column",
+    alignItems:"center",
+    
+  },
+  header: {
+    paddingHorizontal: 10,
+    justifyContent:"flex-start",
+    alignItems:"flex-start",
+    flexDirection: "row",
+    width: windowWidth,
+    height:windowHeight* 10 / 100,
+    marginTop: 20,
+  
+    backgroundColor:"#1D94AD"
+    
+    
+  },
+  footer: {
+    width: windowWidth,
+    height: (windowHeight * 10 /100)-20 ,
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems:"center",
+    justifyContent:"center",
+    backgroundColor: "#1D94AD",
+
+  }
+  
 });

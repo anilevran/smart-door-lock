@@ -22,11 +22,11 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export function LockDetail(props) {
-  var [isAuthed, setAuthed] = useState(false);
+  var [isAuthed, setAuthed] = useState(true);
   const getlocks = async () => {
     try {
       axios
-        .get("http://192.168.1.33:9000/api/locks", {
+        .get("http://192.168.1.22:9000/api/locks", {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -50,14 +50,13 @@ export function LockDetail(props) {
     props.navigation.navigate("Home");
   };
 
-  useEffect(() => {
-    getlocks();
-  }, []);
+  
 
   return (
     <>
       {isAuthed ? (
         <View style={styles.container}>
+          <View style={styles.header}>
           <View style={styles.iconContainer}>
             <TouchableHighlight
               underlayColor="none"
@@ -68,6 +67,8 @@ export function LockDetail(props) {
               <FontAwesomeIcon size={40} icon={faCircleArrowLeft} />
             </TouchableHighlight>
           </View>
+          </View>
+          <View style={styles.body}>
           <View style={styles.keyNameContainer}>
             <Text style={styles.keyLabel}>Key Name Here</Text>
           </View>
@@ -75,11 +76,14 @@ export function LockDetail(props) {
             <Text style={styles.batteryLabel}>Battery</Text>
             <Text style={styles.batteryLabel}>Battery</Text>
           </View>
+          </View>
+          <View style={styles.footer}>
           <View style={styles.optionsContainer}>
             <Text style={styles.optionLabel}>Unlock</Text>
             <Text style={styles.optionLabel}>MonitorLogs</Text>
             <Text style={styles.optionLabel}>Create key for guests</Text>
           </View>
+        </View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -143,4 +147,33 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginLeft: 10,
   },
+  body: {
+    backgroundColor: "blue",
+    width: windowWidth,
+    height: windowHeight * 75 /100,
+    display: "flex",
+    flexDirection: "column",
+    
+  },
+  header: {
+    paddingHorizontal: 10,
+    justifyContent:"flex-end",
+    alignItems:"center",
+    flexDirection: "row",
+    width: windowWidth,
+    height:windowHeight* 5 / 100,
+    marginTop: 20,
+    
+    
+  },
+  footer: {
+    width: windowWidth,
+    height: (windowHeight * 20 /100)-20 ,
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems:"center",
+
+    
+
+  }
 });
