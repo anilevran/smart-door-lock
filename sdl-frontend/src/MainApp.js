@@ -4,6 +4,7 @@ import axios from "axios";
 import { save, getValueFor, deleteItem } from "../storage.js";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { delay } from "../delay.js";
+import { useIsFocused } from "@react-navigation/native";
 
 import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -19,12 +20,15 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
+import QRCode from "react-native-qrcode-svg";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export function MainApp(props) {
   var [isAuthed, setAuthed] = useState(false);
   var [locks, setLocks] = useState([]);
+  var [newLockId, setnewLockId] = useState(null);
+  const isFocused = useIsFocused();
 
   const getLocks = async () => {
     try {
@@ -44,6 +48,25 @@ export function MainApp(props) {
     }
   };
 
+  const genQR = async () => {
+    try {
+      axios
+        .get("http://192.168.1.33:9000/api/locks/findEmptyLock", {
+          headers: {
+            "auth-token": await getValueFor("auth-token"),
+          },
+        })
+        .then((result) => {
+          setnewLockId(result.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log("Cannot Find Empty Lock");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleLogout = async () => {
     setAuthed(false);
     await deleteItem("auth-token");
@@ -66,11 +89,12 @@ export function MainApp(props) {
 
   useEffect(() => {
     getLocks();
-  }, []);
+    genQR();
+  }, [isFocused]);
 
   return (
     <>
-      {isAuthed ? (
+      {isAuthed && newLockId ? (
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableHighlight underlayColor="none" onPress={handleLogout}>
@@ -86,8 +110,11 @@ export function MainApp(props) {
               })}
             </View>
           </View>
+          <QRCode value={newLockId} />
           <View style={styles.footer}>
-            <TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => props.navigation.navigate("Attach")}
+            >
               <View style={styles.newLockContainer}>
                 <Text style={styles.newLockButton}>Attach New Lock</Text>
               </View>

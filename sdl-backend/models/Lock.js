@@ -3,17 +3,17 @@ const Schema = mongoose.Schema;
 
 const lockSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
-      required: true,
+      default: null,
     },
     isLocked: {
       type: Boolean,
-      required: true,
+      default: null,
+    },
+    isAttached: {
+      type: Boolean,
+      default: null,
     },
   },
   { timestamps: true }

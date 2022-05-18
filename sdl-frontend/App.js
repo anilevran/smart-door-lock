@@ -9,6 +9,7 @@ import { MainApp } from "./src/MainApp.js";
 import { LockDetail } from "./src/LockDetail.js";
 import { AssignKey } from "./src/AssignKey.js";
 import { ViewLogs } from "./src/ViewLogs.js";
+import { Attach } from "./src/Attach.js";
 import { save, getValueFor } from "./storage.js";
 
 const Stack = createStackNavigator();
@@ -32,6 +33,7 @@ export default function App(props) {
               <Stack.Screen name="LockDetail" component={LockDetail} />
               <Stack.Screen name="AssignKey" component={AssignKey} />
               <Stack.Screen name="ViewLogs" component={ViewLogs} />
+              <Stack.Screen name="Attach" component={Attach} />
             </>
           ) : (
             <>

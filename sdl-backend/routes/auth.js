@@ -22,7 +22,6 @@ router.post("/signin", async (req, res) => {
   //JWT
   const token = jwt.sign({ _id: userTemp._id }, process.env.TOKEN_SECRET);
   res.header("auth-token", token).send(token);
-  //res.send("User signed in");
 });
 
 router.post("/signup", async (req, res) => {

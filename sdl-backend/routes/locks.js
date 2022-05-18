@@ -4,28 +4,30 @@ const User = require("../models/User.js");
 const verify = require("./verifyToken");
 const jwt = require("jsonwebtoken");
 
-// router.get("/", verify, (req, res) => {
-//   res.json({
-//     locks: {
-//       id: "1",
-//       name: "home",
-//     },
-//   });
-// });
+router.post("/attach", verify, async (req, res) => {
+  const token = req.header("auth-token");
+  const lock = await Lock.findById(req.body.id);
+  const userId = await jwt.decode(token)._id;
+  const userFilter = { _id: userId };
+  const userUpdate = { $push: { permissions: lock._id } };
+  await User.findOneAndUpdate(userFilter, userUpdate);
+  await lock.updateOne({ name: "exLockName", isAttached: true });
 
-router.get("/attach", verify, (req, res) => {
-  res.json("attach");
+  try {
+    res.send("Lock Attached to User Successfully");
+  } catch (err) {
+    res.status(400).send(err);
+  }
 });
 
 router.get("/getLocks", verify, async (req, res) => {
   const token = req.header("auth-token");
-  if (!token) return res.status(401).send("Access Denied");
 
   const userId = await jwt.decode(token)._id;
   const user = await User.findById(userId);
 
   var itemsProcessed = 0;
-  const someFunc = async (id) => {
+  const getLocks = async (id) => {
     let lock = await Lock.findById(id);
     let responseObj = {
       id: lock._id,
@@ -40,14 +42,11 @@ router.get("/getLocks", verify, async (req, res) => {
   };
   let lockArr = [];
   user.permissions.forEach((id) => {
-    someFunc(id);
+    getLocks(id);
   });
 });
 
 router.post("/getLock", verify, async (req, res) => {
-  const token = req.header("auth-token");
-  if (!token) return res.status(401).send("Access Denied");
-
   let lock = await Lock.findById(req.body.id);
   let responseObj = {
     id: lock._id,
@@ -57,26 +56,21 @@ router.post("/getLock", verify, async (req, res) => {
   res.send(responseObj);
 });
 
-router.get("/setLocks", verify, async (req, res) => {
-  var lock = new Lock({
-    id: "2",
-    name: "lock2",
-    isLocked: true,
-  });
-
-  const token = req.header("auth-token");
-  if (!token) return res.status(401).send("Access Denied");
-
-  const userId = await jwt.decode(token)._id;
-  const filter = { _id: userId };
-  const update = { $push: { permissions: lock._id } };
-  await User.findOneAndUpdate(filter, update);
-
-  try {
-    await lock.save();
-    res.send(lock._id + " Saved Successfully");
-  } catch (err) {
-    res.status(400).send(err);
+router.post("/createLocks", verify, async (req, res) => {
+  var inner_count = 0;
+  while (inner_count < req.body.count) {
+    let lock = new Lock();
+    inner_count++;
+    try {
+      await lock.save();
+    } catch (err) {
+      res.status(400).send(err);
+    }
   }
+  res.send("Locks Saved Successfully");
+});
+router.get("/findEmptyLock", verify, async (req, res) => {
+  let lock = await Lock.findOne({ isAttached: null });
+  res.send(lock._id);
 });
 module.exports = router;
