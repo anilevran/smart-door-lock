@@ -45,7 +45,7 @@ export class Home extends Component {
             onPress={() => this.props.navigation.navigate("SignIn")}
           >
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Giriş Yap</Text>
+              <Text style={styles.buttonText}>Login</Text>
             </View>
           </TouchableHighlight>
           <TouchableHighlight
@@ -53,7 +53,7 @@ export class Home extends Component {
             onPress={() => this.props.navigation.navigate("SignUp")}
           >
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Kayıt Ol</Text>
+              <Text style={styles.buttonText}>Sign Up</Text>
             </View>
           </TouchableHighlight>
         </View>

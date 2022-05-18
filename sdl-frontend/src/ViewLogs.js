@@ -32,7 +32,7 @@ export function ViewLogs(props) {
     };
     try {
       axios
-        .post("http://192.168.1.33:9000/api/locks/getLock", body, {
+        .post("http://192.168.1.35:9000/api/locks/getLock", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },

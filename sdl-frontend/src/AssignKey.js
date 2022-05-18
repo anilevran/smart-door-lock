@@ -146,7 +146,7 @@ export function AssignKey(props) {
                 />
               </View>
             </View>
-            <Text>selected: {date.toLocaleString()}</Text>
+            <Text>selected: {date?.toLocaleString()}</Text>
           </View>
 
           <View style={styles.footer}>

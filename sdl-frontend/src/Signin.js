@@ -25,7 +25,7 @@ export function Signin(props) {
   const handleSignIn = () => {
     try {
       axios
-        .post("http://192.168.1.33:9000/api/auth/signin", {
+        .post("http://192.168.1.35:9000/api/auth/signin", {
           email: email,
           password: password,
         })
@@ -79,7 +79,7 @@ export function Signin(props) {
             </View>
           </View>
           <View style={styles.formLine}>
-            <Text style={styles.label}>Şifre</Text>
+            <Text style={styles.label}>Password</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -93,7 +93,7 @@ export function Signin(props) {
           <View style={styles.buttonContainer}>
             <TouchableHighlight underlayColor="none" onPress={handleSignIn}>
               <View style={styles.button}>
-                <Text style={styles.buttonText}>Giriş Yap</Text>
+                <Text style={styles.buttonText}>Login</Text>
               </View>
             </TouchableHighlight>
           </View>

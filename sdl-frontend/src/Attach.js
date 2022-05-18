@@ -42,7 +42,7 @@ export function Attach(props) {
     };
     try {
       axios
-        .post("http://192.168.1.33:9000/api/locks/attach", body, {
+        .post("http://192.168.1.35:9000/api/locks/attach", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
