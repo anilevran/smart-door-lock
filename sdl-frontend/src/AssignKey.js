@@ -1,7 +1,6 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState} from "react";
 import {
   StyleSheet,
   View,
@@ -12,7 +11,9 @@ import {
   TouchableHighlight,
   Alert,
   Button,
+  Platform
 } from "react-native";
+import delay from "../delay"
 import { StatusBar } from "expo-status-bar";
 
 const windowWidth = Dimensions.get("window").width;
@@ -22,22 +23,62 @@ export function AssignKey(props) {
   const [isAuthed, setAuthed] = useState(false);
   const [userName, setuserName] = useState("");
   const [locks, setLocks] = useState([]);
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(true);
-
-  const onChange = (event, selectedDate) => {
-    console.log(event);
-    const currentDate = selectedDate;
-
-    console.log("Date = " + date);
-    console.log("Selected Date = " + selectedDate);
-    setDate(currentDate);
+  const [date, setDate] = useState(new Date(Date.now()));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+ 
+  var onChange = null;
+  var showMode = null;
+  var showDatepicker = null;
+  var showTimepicker = null;
+  if (Platform.OS == "android") {
+     showDatepicker = () => {
+      showMode('date');
+      
+    };
+  
+     showTimepicker = () => {
+      showMode('time');
+    };
+     showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+      onChange = (event, value) => {
+     
+      
+      console.log("Date = " + date);
+      console.log("Selected Date = " + value);
+      if(value)
+      setDate(value);
+      
+        
+        if(event.type == "set" && mode == "date"){
+          setShow(false);
+          showTimepicker();
+          
+      
+        
+        }
+      if(mode == "time")
+      setShow(false);
+    
   };
+    
+  }
+  else{
+     onChange = (event, value) => {
+    
+      
+  
+      console.log("Date = " + date);
+      console.log("Selected Date = " + value);
+      setDate(value);
+    };
+  }
+ 
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
+  
 
   const getLocks = async () => {
     //   try {
@@ -105,7 +146,29 @@ export function AssignKey(props) {
               <View style={{ width: 100 }}>
                 <Text>Expiration Date:</Text>
               </View>
+              {Platform.OS == "android"?
+              <>
               <View
+                style={{
+                  width: "30%",
+                  height: "50%",
+                  borderRadius: 50,
+                }}
+              >
+                {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  onChange={onChange}
+                  themeVariant="dark"
+                  style={{
+                    borderRadius: 50,
+                  }}
+                />
+                )}
+              </View></>:<><View
                 style={{
                   width: "30%",
                   height: "50%",
@@ -144,15 +207,26 @@ export function AssignKey(props) {
                     borderRadius: 50,
                   }}
                 />
-              </View>
+              </View></>}
+              
+              
+              
+                
+             
             </View>
             <Text>selected: {date?.toLocaleString()}</Text>
           </View>
-
+          {Platform.OS == "android"?
+          !show && (
+            <View style={styles.btnContainer}>
+              <Button title="Show Picker" color="purple" onPress={showDatepicker} />
+            </View>
+          ):<></>}
+          
           <View style={styles.footer}>
             <TouchableHighlight>
               <View style={styles.newLockContainer}>
-                <Text style={styles.newLockButton}>Attach New Lock</Text>
+                <Text style={styles.newLockButton}>Give temporary key</Text>
               </View>
             </TouchableHighlight>
           </View>
