@@ -193,6 +193,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: windowWidth,
     height: 150,
+    marginTop:-30,
+    
   },
   optionLabel: {
     display: "flex",

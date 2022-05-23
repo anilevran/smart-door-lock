@@ -1,6 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState} from "react";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import {
   StyleSheet,
   View,
@@ -26,6 +28,8 @@ export function AssignKey(props) {
   const [date, setDate] = useState(new Date(Date.now()));
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  let dateArr = date?.toLocaleString().split(" ");
+  var formattedDate = (`${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(0, dateArr[3].length - 3)}`);
  
   var onChange = null;
   var showMode = null;
@@ -44,33 +48,23 @@ export function AssignKey(props) {
       setShow(true);
       setMode(currentMode);
     };
-      onChange = (event, value) => {
-     
-      
-      console.log("Date = " + date);
-      console.log("Selected Date = " + value);
-      if(value)
-      setDate(value);
-      
-        
-        if(event.type == "set" && mode == "date"){
-          setShow(false);
+    onChange = (event, value) => {
+      if (value) setDate(value);
+      if (event.type == "set" && mode == "time") {
+        setShow(false);
+        setTimeout(() => {
+          setMode("date");
+        }, 200);
+      }
+      if (event.type == "set" && mode == "date") {
+        setShow(false);
+        setTimeout(() => {
           showTimepicker();
-          
-      
-        
-        }
-      if(mode == "time")
-      setShow(false);
-    
-  };
-    
-  }
-  else{
-     onChange = (event, value) => {
-    
-      
-  
+        }, 200);
+      }
+    };
+  } else {
+    onChange = (event, value) => {
       console.log("Date = " + date);
       console.log("Selected Date = " + value);
       setDate(value);
@@ -116,7 +110,13 @@ export function AssignKey(props) {
   useEffect(() => {
     getLocks();
   }, []);
-
+  useEffect(() => {
+    console.log("ddate updatedd");
+    formattedDate = `${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(0, dateArr[3].length - 3)}`;
+  }, [date]);
+  useEffect(() => {
+    console.log("show updated");
+  }, [show]);
   return (
     <>
       {isAuthed ? (
@@ -130,9 +130,11 @@ export function AssignKey(props) {
           </View>
 
           <View style={styles.body}>
+            <View style={styles.wrapper}>
+              <View style={styles.formContainer}>
             <View style={styles.formLine}>
-              <View style={{ width: 100 }}>
-                <Text>UserName:</Text>
+              <View style={styles.inputLabel}>
+                <Text style={styles.inputText}>UserName:</Text>
               </View>
               <View style={styles.inputContainer}>
                 <TextInput
@@ -143,18 +145,35 @@ export function AssignKey(props) {
               </View>
             </View>
             <View style={styles.formLine}>
-              <View style={{ width: 100 }}>
-                <Text>Expiration Date:</Text>
+              <View style={styles.inputLabel}>
+                <Text style={styles.inputText}>Expiration Date: </Text>
               </View>
               {Platform.OS == "android"?
               <>
               <View
                 style={{
-                  width: "30%",
+                  width: "60%",
                   height: "50%",
                   borderRadius: 50,
+                  padding:8,
                 }}
               >
+                <View style={styles.dateContainer}>
+                <Text style={{color:"white", fontWeight:"bold"}}> {formattedDate}</Text>
+                {!show &&(
+                 
+                 <TouchableHighlight onPress={showDatepicker} >
+                 
+                 <FontAwesomeIcon  icon={faCalendarDays} />
+                 
+                 </TouchableHighlight>
+                 
+                 
+ 
+                   )}
+                
+                </View>
+
                 {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -214,21 +233,28 @@ export function AssignKey(props) {
                 
              
             </View>
-            <Text>selected: {date?.toLocaleString()}</Text>
-          </View>
-          {Platform.OS == "android"?
-          !show && (
-            <View style={styles.btnContainer}>
-              <Button title="Show Picker" color="purple" onPress={showDatepicker} />
             </View>
-          ):<></>}
-          
-          <View style={styles.footer}>
             <TouchableHighlight>
               <View style={styles.newLockContainer}>
                 <Text style={styles.newLockButton}>Give temporary key</Text>
               </View>
             </TouchableHighlight>
+          {/* {Platform.OS == "android"?
+          !show && (
+            <View style={styles.btnContainer}>
+              <TouchableHighlight onPress={showDatepicker} >
+                <View style={styles.dateButton}>
+                <Text>Show Date Picker</Text>
+                </View>
+                </TouchableHighlight>
+
+            </View>
+            
+          ):<></>} */}
+          </View>
+          </View>
+          <View style={styles.footer}>
+            
           </View>
         </View>
       ) : (
@@ -261,29 +287,42 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: "#1D94AD",
     width: windowWidth,
-    height: (windowHeight * 75) / 100,
+    height: (windowHeight * 90) / 100,
     display: "flex",
     flexDirection: "column",
     paddingVertical: 30,
+    alignItems: "center",
+    justifyContent:"center",
+  },
+  inputLabel:{
+    width:130,
+    height:"30%",
+    
+
+    
+
+  },
+  inputText:{
+    fontSize:17,
+    color: "white",
+    fontWeight: "bold",
   },
   inputContainer: {
-    width: "70%",
-    height: "50%",
+    width: "60%",
+    height: "40%",
     backgroundColor: "#E5E4E1",
-    borderBottomWidth: 4,
-    borderColor: "#000",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     padding: 5,
   },
   input: {
-    fontSize: 18,
+    fontSize: 15,
     color: "#6A6565",
   },
   formLine: {
     width: "100%",
-    height: "15%",
+    height: 80,
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -294,14 +333,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 300,
-    height: 100,
-    marginLeft: 55,
-    borderRadius: 100,
+    height: 85,
+    borderRadius: 10,
     backgroundColor: "#FFA04D",
+    marginBottom:30,
   },
   newLockButton: {
     color: "#000",
-    fontSize: 30,
+    fontSize: 20,
+
   },
   header: {
     paddingHorizontal: 10,
@@ -315,9 +355,40 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: windowWidth,
-    height: (windowHeight * 20) / 100 - 20,
+    height: (windowHeight * 5) / 100 - 20,
     backgroundColor: "#1D94AD",
     flexDirection: "row",
     alignItems: "center",
   },
+  wrapper:{
+    backgroundColor:"#0063C7",
+    height: "100%",
+    borderRadius:5,
+    width:"90%",
+    alignItems:"center",
+    justifyContent:"space-between"
+    
+  },
+  btnContainer:{
+    width:"100%",
+    height:70,
+    backgroundColor:"purple",
+    borderRadius:5,
+    justifyContent:"center",
+    alignItems:"center",
+    
+    
+    
+  },
+  dateContainer:{
+    justifyContent:"center",
+    alignItems:"flex-start",
+    height:"100%",
+    flexDirection:"row",    
+  },
+  formContainer:{
+    height:200,
+    width: "100%",
+    
+  }
 });
