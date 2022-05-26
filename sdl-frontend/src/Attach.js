@@ -49,7 +49,7 @@ export function Attach(props) {
         })
         .then(async (result) => {
           console.log(result.data);
-          props.navigation.navigate("MainApp");
+          props.navigation.navigate("WifiCredentials", {lockId:data});
         })
         .catch((err) => {
           console.log(err.response);

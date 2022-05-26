@@ -11,6 +11,7 @@ import { AssignKey } from "./src/AssignKey.js";
 import { ViewLogs } from "./src/ViewLogs.js";
 import { Attach } from "./src/Attach.js";
 import { save, getValueFor } from "./storage.js";
+import { WifiCredentials } from "./src/WifiCredentials.js";
 
 const Stack = createStackNavigator();
 
@@ -34,12 +35,16 @@ export default function App(props) {
               <Stack.Screen name="AssignKey" component={AssignKey} />
               <Stack.Screen name="ViewLogs" component={ViewLogs} />
               <Stack.Screen name="Attach" component={Attach} />
+              <Stack.Screen name="WifiCredentials" component={WifiCredentials} />
             </>
           ) : (
             <>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
+              <Stack.Screen name="SignIn" component={Signin} />
+              <Stack.Screen name="WifiCredentials" component={WifiCredentials} />
+              
             </>
           )}
         </Stack.Navigator>
