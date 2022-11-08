@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config({ path: __dirname + "\\.env" });
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
 const lockRouter = require("./routes/locks");
+const logRouter = require("./routes/logs");
 
 const port = process.env.PORT;
 const mongoUri = `mongodb+srv://${process.env.DB_ADMIN}:${process.env.DB_PASS}@${process.env.DB_CLUSTERNAME}.4spmi.mongodb.net/${process.env.DB_DATABASENAME}?retryWrites=true&w=majority`;
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 
 app.use(`/api/auth`, authRouter);
 app.use(`/api/locks`, lockRouter);
+app.use(`/api/logs`, logRouter);
 
 app.listen(port, () => {
   console.log(`App listening at port:${port}`);

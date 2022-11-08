@@ -1,7 +1,7 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import axios from "axios";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import {
   StyleSheet,
@@ -13,9 +13,9 @@ import {
   TouchableHighlight,
   Alert,
   Button,
-  Platform
+  Platform,
 } from "react-native";
-import delay from "../delay"
+import delay from "../delay";
 import { StatusBar } from "expo-status-bar";
 
 const windowWidth = Dimensions.get("window").width;
@@ -26,25 +26,39 @@ export function AssignKey(props) {
   const [userName, setuserName] = useState("");
   const [locks, setLocks] = useState([]);
   const [date, setDate] = useState(new Date(Date.now()));
-  const [mode, setMode] = useState('date');
+  const [formattedDate, setFormattedDate] = useState("");
+  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  let dateArr = date?.toLocaleString().split(" ");
-  var formattedDate = (`${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(0, dateArr[3].length - 3)}`);
- 
+  var dateArr = [];
+  if (Platform.OS == "android") {
+    dateArr = date?.toLocaleString().split(" ");
+    console.log(dateArr);
+    dateArr.splice(2, 1);
+
+    setFormattedDate(
+      `${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(
+        0,
+        dateArr[3].length - 3
+      )}`
+    );
+  } else {
+    dateArr = date?.toLocaleString().split(" ");
+    console.log(dateArr);
+  }
+
   var onChange = null;
   var showMode = null;
   var showDatepicker = null;
   var showTimepicker = null;
   if (Platform.OS == "android") {
-     showDatepicker = () => {
-      showMode('date');
-      
+    showDatepicker = () => {
+      showMode("date");
     };
-  
-     showTimepicker = () => {
-      showMode('time');
+
+    showTimepicker = () => {
+      showMode("time");
     };
-     showMode = (currentMode) => {
+    showMode = (currentMode) => {
       setShow(true);
       setMode(currentMode);
     };
@@ -70,9 +84,6 @@ export function AssignKey(props) {
       setDate(value);
     };
   }
- 
-
-  
 
   const getLocks = async () => {
     //   try {
@@ -111,12 +122,17 @@ export function AssignKey(props) {
     getLocks();
   }, []);
   useEffect(() => {
-    console.log("ddate updatedd");
-    formattedDate = `${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(0, dateArr[3].length - 3)}`;
+    console.log("date updated");
+    if (Platform.OS == "android") {
+      setFormattedDate(
+        `${dateArr[2]} ${dateArr[1]} ${dateArr[4]} ${dateArr[3].substring(
+          0,
+          dateArr[3].length - 3
+        )}`
+      );
+    } else {
+    }
   }, [date]);
-  useEffect(() => {
-    console.log("show updated");
-  }, [show]);
   return (
     <>
       {isAuthed ? (
@@ -132,114 +148,113 @@ export function AssignKey(props) {
           <View style={styles.body}>
             <View style={styles.wrapper}>
               <View style={styles.formContainer}>
-            <View style={styles.formLine}>
-              <View style={styles.inputLabel}>
-                <Text style={styles.inputText}>UserName:</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter A Valid User Name"
-                  onChangeText={(text) => setuserName(text)}
-                ></TextInput>
-              </View>
-            </View>
-            <View style={styles.formLine}>
-              <View style={styles.inputLabel}>
-                <Text style={styles.inputText}>Expiration Date: </Text>
-              </View>
-              {Platform.OS == "android"?
-              <>
-              <View
-                style={{
-                  width: "60%",
-                  height: "50%",
-                  borderRadius: 50,
-                  padding:8,
-                }}
-              >
-                <View style={styles.dateContainer}>
-                <Text style={{color:"white", fontWeight:"bold"}}> {formattedDate}</Text>
-                {!show &&(
-                 
-                 <TouchableHighlight onPress={showDatepicker} >
-                 
-                 <FontAwesomeIcon  icon={faCalendarDays} />
-                 
-                 </TouchableHighlight>
-                 
-                 
- 
-                   )}
-                
+                <View style={styles.formLine}>
+                  <View style={styles.inputLabel}>
+                    <Text style={styles.inputText}>UserName:</Text>
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Enter A Valid User Name"
+                      onChangeText={(text) => setuserName(text)}
+                    ></TextInput>
+                  </View>
                 </View>
+                <View style={styles.formLine}>
+                  <View style={styles.inputLabel}>
+                    <Text style={styles.inputText}>Expiration Date: </Text>
+                  </View>
+                  {Platform.OS == "android" ? (
+                    <>
+                      <View
+                        style={{
+                          width: "60%",
+                          height: "50%",
+                          borderRadius: 50,
+                          padding: 8,
+                        }}
+                      >
+                        <View style={styles.dateContainer}>
+                          <Text style={{ color: "white", fontWeight: "bold" }}>
+                            {" "}
+                            {formattedDate}
+                          </Text>
+                          {!show && (
+                            <View style={{ marginLeft: 50 }}>
+                              <TouchableHighlight onPress={showDatepicker}>
+                                <FontAwesomeIcon icon={faCalendarDays} />
+                              </TouchableHighlight>
+                            </View>
+                          )}
+                        </View>
 
-                {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  is24Hour={true}
-                  onChange={onChange}
-                  themeVariant="dark"
-                  style={{
-                    borderRadius: 50,
-                  }}
-                />
-                )}
-              </View></>:<><View
-                style={{
-                  width: "30%",
-                  height: "50%",
-                  borderRadius: 50,
-                }}
-              >
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={"date"}
-                  is24Hour={true}
-                  onChange={onChange}
-                  themeVariant="dark"
-                  style={{
-                    borderRadius: 50,
-                  }}
-                />
+                        {show && (
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode={mode}
+                            is24Hour={true}
+                            onChange={onChange}
+                            themeVariant="dark"
+                            style={{
+                              borderRadius: 50,
+                            }}
+                          />
+                        )}
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <View
+                        style={{
+                          width: "30%",
+                          height: "50%",
+                          borderRadius: 50,
+                        }}
+                      >
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={date}
+                          mode={"date"}
+                          is24Hour={true}
+                          onChange={onChange}
+                          themeVariant="dark"
+                          style={{
+                            borderRadius: 50,
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          width: "30%",
+                          height: "50%",
+                          borderRadius: 50,
+                        }}
+                      >
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={date}
+                          mode={"time"}
+                          is24Hour={true}
+                          onChange={onChange}
+                          themeVariant="dark"
+                          textColor="white"
+                          color
+                          style={{
+                            borderRadius: 50,
+                          }}
+                        />
+                      </View>
+                    </>
+                  )}
+                </View>
               </View>
-              <View
-                style={{
-                  width: "30%",
-                  height: "50%",
-                  borderRadius: 50,
-                }}
-              >
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={"time"}
-                  is24Hour={true}
-                  onChange={onChange}
-                  themeVariant="dark"
-                  textColor="white"
-                  color
-                  style={{
-                    borderRadius: 50,
-                  }}
-                />
-              </View></>}
-              
-              
-              
-                
-             
-            </View>
-            </View>
-            <TouchableHighlight>
-              <View style={styles.newLockContainer}>
-                <Text style={styles.newLockButton}>Give temporary key</Text>
-              </View>
-            </TouchableHighlight>
-          {/* {Platform.OS == "android"?
+              <TouchableHighlight>
+                <View style={styles.newLockContainer}>
+                  <Text style={styles.newLockButton}>Give temporary key</Text>
+                </View>
+              </TouchableHighlight>
+              {/* {Platform.OS == "android"?
           !show && (
             <View style={styles.btnContainer}>
               <TouchableHighlight onPress={showDatepicker} >
@@ -251,11 +266,9 @@ export function AssignKey(props) {
             </View>
             
           ):<></>} */}
+            </View>
           </View>
-          </View>
-          <View style={styles.footer}>
-            
-          </View>
+          <View style={styles.footer}></View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -292,18 +305,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingVertical: 30,
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
   },
-  inputLabel:{
-    width:130,
-    height:"30%",
-    
-
-    
-
+  inputLabel: {
+    width: 130,
+    height: "30%",
   },
-  inputText:{
-    fontSize:17,
+  inputText: {
+    fontSize: 17,
     color: "white",
     fontWeight: "bold",
   },
@@ -336,12 +345,11 @@ const styles = StyleSheet.create({
     height: 85,
     borderRadius: 10,
     backgroundColor: "#FFA04D",
-    marginBottom:30,
+    marginBottom: 30,
   },
   newLockButton: {
     color: "#000",
     fontSize: 20,
-
   },
   header: {
     paddingHorizontal: 10,
@@ -360,35 +368,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  wrapper:{
-    backgroundColor:"#0063C7",
+  wrapper: {
     height: "100%",
-    borderRadius:5,
-    width:"90%",
-    alignItems:"center",
-    justifyContent:"space-between"
-    
+    borderRadius: 5,
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  btnContainer:{
-    width:"100%",
-    height:70,
-    backgroundColor:"purple",
-    borderRadius:5,
-    justifyContent:"center",
-    alignItems:"center",
-    
-    
-    
-  },
-  dateContainer:{
-    justifyContent:"center",
-    alignItems:"flex-start",
-    height:"100%",
-    flexDirection:"row",    
-  },
-  formContainer:{
-    height:200,
+  btnContainer: {
     width: "100%",
-    
-  }
+    height: 70,
+    backgroundColor: "purple",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateContainer: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    height: "100%",
+    flexDirection: "row",
+  },
+  formContainer: {
+    height: 200,
+    width: "100%",
+  },
 });

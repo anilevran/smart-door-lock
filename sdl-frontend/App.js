@@ -21,9 +21,7 @@ export default function App(props) {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
-          headerMode={{
-            headerShown: false,
-          }}
+          screenOptions={{ headerShown: false }}
         >
           {getValueFor("auth-token") ? (
             <>
@@ -35,16 +33,16 @@ export default function App(props) {
               <Stack.Screen name="AssignKey" component={AssignKey} />
               <Stack.Screen name="ViewLogs" component={ViewLogs} />
               <Stack.Screen name="Attach" component={Attach} />
-              <Stack.Screen name="WifiCredentials" component={WifiCredentials} />
+              <Stack.Screen
+                name="WifiCredentials"
+                component={WifiCredentials}
+              />
             </>
           ) : (
             <>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SignUp" component={Signup} />
               <Stack.Screen name="SignIn" component={Signin} />
-              <Stack.Screen name="SignIn" component={Signin} />
-              <Stack.Screen name="WifiCredentials" component={WifiCredentials} />
-              
             </>
           )}
         </Stack.Navigator>

@@ -5,15 +5,23 @@ const lockSchema = new Schema(
   {
     name: {
       type: String,
-      default: null,
+      default: "",
     },
     isLocked: {
       type: Boolean,
-      default: null,
+      default: false,
     },
     isAttached: {
       type: Boolean,
-      default: null,
+      default: false,
+    },
+    connected_wifi_ssid: {
+      type: String,
+      default: "",
+    },
+    connected_wifi_password: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

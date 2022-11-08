@@ -19,13 +19,13 @@ import { StatusBar } from "expo-status-bar";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export function Signin(props) {
-  var [email, setEmail] = useState("");
-  var [password, setPassword] = useState("");
+  var [email, setEmail] = useState("anil.evran7@gmail.com");
+  var [password, setPassword] = useState("10261026");
 
   const handleSignIn = () => {
     try {
       axios
-        .post("http://192.168.1.35:9000/api/auth/signin", {
+        .post("http://192.168.1.57:9000/api/auth/signin", {
           email: email,
           password: password,
         })
@@ -36,6 +36,7 @@ export function Signin(props) {
         .catch((err) => {
           console.log(err);
           console.log("Giriş yaparken hata oluştu");
+          alert("Invalid username or password");
         });
     } catch (error) {
       console.log(error);

@@ -19,6 +19,10 @@ const userSchema = new Schema(
       type: [String],
       required: true,
     },
+    tempPermissions: {
+      type: [Object],
+      default: [],
+    },
   },
   { timestamps: true }
 );

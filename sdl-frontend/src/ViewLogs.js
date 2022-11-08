@@ -25,6 +25,8 @@ const windowHeight = Dimensions.get("window").height;
 export function ViewLogs(props) {
   const [isAuthed, setAuthed] = useState(false);
   var [keyName, setkeyName] = useState(null);
+  const [allLogs, setAllLogs] = useState([]);
+  const [allLogsFormattedKey, setallLogsFormattedKey] = useState([]);
 
   const getLocks = async () => {
     const body = {
@@ -32,7 +34,7 @@ export function ViewLogs(props) {
     };
     try {
       axios
-        .post("http://192.168.1.35:9000/api/locks/getLock", body, {
+        .post("http://192.168.1.57:9000/api/locks/getLock", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -51,8 +53,44 @@ export function ViewLogs(props) {
     setAuthed(true);
   };
 
+  const getLastEntry = async () => {
+    const body = {
+      id: props.route.params.lockId,
+    };
+    try {
+      axios
+        .post("http://192.168.1.57:9000/api/logs/getByLockIdAll", body, {
+          headers: {
+            "auth-token": await getValueFor("auth-token"),
+          },
+        })
+        .then(async (result) => {
+          if (result.data == "cannot get logs") {
+          } else {
+            result.data.forEach((log) => {
+              const updatedDate = new Date(log.updatedAt);
+              const dateDay = updatedDate.getDate();
+              const dateMonth = updatedDate.getMonth();
+              const dateYear = updatedDate.getFullYear();
+              const dateHours = updatedDate.getHours();
+              const dateMinutes = updatedDate.getMinutes();
+              const newLogElement = `${dateDay}/${dateMonth}/${dateYear} - ${dateHours}:${dateMinutes} - ${log.username}`;
+              console.log(newLogElement);
+              setAllLogs((oldArray) => [...oldArray, newLogElement]);
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("Cannot get last entry");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getLocks();
+    getLastEntry();
   }, []);
 
   return (
@@ -83,30 +121,9 @@ export function ViewLogs(props) {
               </View>
               <View style={styles.tableRows}>
                 <FlatList
-                  data={[
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                    { key: "Devin-12/03/2020-12:23" },
-                  ]}
+                  data={allLogs.map((e, index) => {
+                    return { key: `${index} - ${e}` };
+                  })}
                   renderItem={({ item }) => (
                     <>
                       <View style={styles.row}>
@@ -117,7 +134,7 @@ export function ViewLogs(props) {
                         </View>
                         <View style={styles.rowValue}>
                           <Text style={styles.tableDescText}>
-                            {item.key.split("-")[0]}
+                            {item.key.split("-")[3]}
                           </Text>
                         </View>
                       </View>

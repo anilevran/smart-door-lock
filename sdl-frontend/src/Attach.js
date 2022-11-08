@@ -37,28 +37,8 @@ export function Attach(props) {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    const body = {
-      id: data,
-    };
-    try {
-      axios
-        .post("http://192.168.1.35:9000/api/locks/attach", body, {
-          headers: {
-            "auth-token": await getValueFor("auth-token"),
-          },
-        })
-        .then(async (result) => {
-          console.log(result.data);
-          props.navigation.navigate("WifiCredentials", {lockId:data});
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log("Cannot Attach Lock");
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    props.navigation.navigate("WifiCredentials", { lockId: data });
+    //alert(`Please make sure that you are connected to esp access point`);
   };
 
   if (hasPermission === null) {

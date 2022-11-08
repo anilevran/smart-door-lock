@@ -11,7 +11,7 @@ router.post("/attach", verify, async (req, res) => {
   const userFilter = { _id: userId };
   const userUpdate = { $push: { permissions: lock._id } };
   await User.findOneAndUpdate(userFilter, userUpdate);
-  await lock.updateOne({ name: "exLockName", isAttached: true });
+  await lock.updateOne({ name: "lockname", isAttached: true });
 
   try {
     res.send("Lock Attached to User Successfully");
@@ -69,8 +69,15 @@ router.post("/createLocks", verify, async (req, res) => {
   }
   res.send("Locks Saved Successfully");
 });
+
+router.post("/updateLockStatus", verify, async (req, res) => {
+  let lock = await Lock.findById(req.body.id);
+  await lock.updateOne({ isLocked: req.body.isLocked });
+  res.send("Lock Status Updated");
+});
+
 router.get("/findEmptyLock", verify, async (req, res) => {
-  let lock = await Lock.findOne({ isAttached: null });
+  let lock = await Lock.findOne({ isAttached: false });
   res.send(lock._id);
 });
 module.exports = router;

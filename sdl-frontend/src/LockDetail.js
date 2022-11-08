@@ -22,8 +22,10 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export function LockDetail(props) {
-  var [isAuthed, setAuthed] = useState(true);
-  var [keyName, setkeyName] = useState(null);
+  const [isAuthed, setAuthed] = useState(false);
+  const [keyName, setkeyName] = useState(null);
+  const [isLocked, setLocked] = useState(false);
+  const [lastEntry, setLastEntry] = useState("No entries yet");
 
   const getLock = async () => {
     const body = {
@@ -31,7 +33,7 @@ export function LockDetail(props) {
     };
     try {
       axios
-        .post("http://192.168.1.35:9000/api/locks/getLock", body, {
+        .post("http://192.168.1.57:9000/api/locks/getLock", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -39,10 +41,127 @@ export function LockDetail(props) {
         .then(async (result) => {
           setAuthed(true);
           setkeyName(result.data.name);
+          setLocked(result.data.isLocked);
         })
         .catch((err) => {
           console.log(err.response);
           console.log("Cannot Get Locks");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateLockStatus = async (lockStatus) => {
+    const body = {
+      id: props.route.params.lockId,
+      isLocked: lockStatus,
+    };
+    try {
+      axios
+        .post("http://192.168.1.57:9000/api/locks/updateLockStatus", body, {
+          headers: {
+            "auth-token": await getValueFor("auth-token"),
+          },
+        })
+        .then(async (result) => {
+          console.log("Updated Lock Status");
+          setLocked(lockStatus);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log("Device action error");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLastEntry = async () => {
+    const body = {
+      id: props.route.params.lockId,
+    };
+    try {
+      axios
+        .post("http://192.168.1.57:9000/api/logs/getByLockId", body, {
+          headers: {
+            "auth-token": await getValueFor("auth-token"),
+          },
+        })
+        .then(async (result) => {
+          if (result.data == "cannot get logs") {
+          } else {
+            const updatedDate = new Date(result.data.updatedAt);
+            const dateDay = updatedDate.getDate();
+            const dateMonth = updatedDate.getMonth();
+            const dateYear = updatedDate.getFullYear();
+            const dateHours = updatedDate.getHours();
+            const dateMinutes = updatedDate.getMinutes();
+            setLastEntry(
+              `${result.data.username} ${
+                result.data.isLocked ? "Locked" : "Unlocked"
+              } at ${dateDay}/${dateMonth}/${dateYear} - ${dateHours}:${dateMinutes}`
+            );
+          }
+        })
+        .catch((err) => {
+          console.log("Cannot get last entry");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLockAction = async () => {
+    if (isLocked === false) {
+      try {
+        axios
+          .get("http://192.168.1.125/lock")
+          .then(async (result) => {
+            console.log("device locked");
+            updateLockStatus(true);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            console.log("Device action error");
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        axios
+          .get("http://192.168.1.125/unlock")
+          .then(async (result) => {
+            console.log("device unlocked");
+            updateLockStatus(false);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            console.log("Device action error");
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const body = {
+      id: props.route.params.lockId,
+    };
+    try {
+      axios
+        .post("http://192.168.1.57:9000/api/logs/setLog", body, {
+          headers: {
+            "auth-token": await getValueFor("auth-token"),
+          },
+        })
+        .then(async (result) => {
+          console.log("Log Saved Successfully");
+          setLocked(lockStatus);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log("Log error");
         });
     } catch (error) {
       console.log(error);
@@ -57,7 +176,12 @@ export function LockDetail(props) {
 
   useEffect(() => {
     getLock();
+    getLastEntry();
   }, []);
+  useEffect(() => {
+    getLock();
+    getLastEntry();
+  }, [isLocked]);
 
   return (
     <>
@@ -82,10 +206,12 @@ export function LockDetail(props) {
             <View style={styles.detailContainer}>
               <View style={styles.formLine}>
                 <View style={styles.formLabel}>
-                  <Text style={styles.textStyle}>Battery:</Text>
+                  <Text style={styles.textStyle}>Status: </Text>
                 </View>
                 <View style={styles.formValue}>
-                  <Text style={styles.textStyle}>100%</Text>
+                  <Text style={styles.textStyle}>
+                    {isLocked ? "Door Locked" : "Door Open"}
+                  </Text>
                 </View>
               </View>
               <View style={styles.formLine}>
@@ -93,13 +219,18 @@ export function LockDetail(props) {
                   <Text style={styles.textStyle}>Last Entry:</Text>
                 </View>
                 <View style={styles.formValue}>
-                  <Text style={styles.textStyle}></Text>
+                  <Text style={styles.textStyle}>{lastEntry}</Text>
                 </View>
               </View>
             </View>
             <View style={styles.optionsContainer}>
-              <TouchableHighlight style={styles.optionLabel}>
-                <Text style={styles.optionText}>Unlock</Text>
+              <TouchableHighlight
+                style={styles.optionLabel}
+                onPress={handleLockAction}
+              >
+                <Text style={styles.optionText}>
+                  {isLocked === false ? "Lock" : "Unlock"}
+                </Text>
               </TouchableHighlight>
               <TouchableHighlight
                 onPress={() => {
@@ -150,6 +281,11 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
   },
+  detailContainer: {
+    width: "80%",
+    height: "45%",
+    marginHorizontal: 10,
+  },
   keyNameContainer: {
     display: "flex",
     alignItems: "center",
@@ -157,7 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFA04D",
     borderRadius: 30,
     width: 300,
-    height: 100,
+    height: "15%",
     marginLeft: 55,
   },
   keyLabel: {
@@ -176,13 +312,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   formLabel: {
-    width: "40%",
+    width: "35%",
     height: "100%",
     justifyContent: "center",
     fontSize: 20,
   },
   formValue: {
-    width: "60%",
+    width: "65%",
     height: "100%",
     justifyContent: "center",
   },
@@ -192,9 +328,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: windowWidth,
-    height: 150,
-    marginTop:-30,
-    
+    height: "25%",
   },
   optionLabel: {
     display: "flex",

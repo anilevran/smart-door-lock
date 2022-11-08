@@ -6,7 +6,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { delay } from "../delay.js";
 import { useIsFocused } from "@react-navigation/native";
 
-import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import {
   StyleSheet,
   View,
@@ -33,14 +33,13 @@ export function MainApp(props) {
   const getLocks = async () => {
     try {
       const result = await axios.get(
-        "http://192.168.1.35:9000/api/locks/getLocks",
+        "http://192.168.1.57:9000/api/locks/getLocks",
         {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
         }
       );
-      setAuthed(true);
       setLocks(result.data);
       await delay(1000);
     } catch (error) {
@@ -51,7 +50,7 @@ export function MainApp(props) {
   const genQR = async () => {
     try {
       axios
-        .get("http://192.168.1.35:9000/api/locks/findEmptyLock", {
+        .get("http://192.168.1.57:9000/api/locks/findEmptyLock", {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -87,14 +86,28 @@ export function MainApp(props) {
     );
   };
 
-  useEffect(() => {
+  const checkToken = async () => {
+    await getValueFor("auth-token").then((res) => {
+      if (res) {
+        setAuthed(true);
+      } else {
+        setAuthed(false);
+      }
+    });
+  };
+  const refreshPage = async () => {
     getLocks();
-    genQR();
+  };
+
+  useEffect(() => {
+    checkToken();
+    getLocks();
+    // genQR();
   }, [isFocused]);
 
   return (
     <>
-      {isAuthed && newLockId ? (
+      {isAuthed ? (
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableHighlight underlayColor="none" onPress={handleLogout}>
@@ -102,15 +115,28 @@ export function MainApp(props) {
                 <Text style={styles.logoutText}>Logout</Text>
               </View>
             </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor="none"
+              onPress={() => {
+                refreshPage();
+              }}
+            >
+              <FontAwesomeIcon
+                style={{ marginRight: 20, marginTop: 10 }}
+                size={20}
+                icon={faRefresh}
+              />
+            </TouchableHighlight>
           </View>
           <View style={styles.body}>
             <View style={styles.keyContainer}>
               {locks.map((lock, index) => {
                 return <KeyButton key={index} id={lock.id} name={lock.name} />;
               })}
+              {/* <QRCode value={newLockId}></QRCode> */}
             </View>
           </View>
-          <QRCode value={newLockId} />
+
           <View style={styles.footer}>
             <TouchableHighlight
               onPress={() => props.navigation.navigate("Attach")}
@@ -200,13 +226,14 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 10,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    flexDirection: "row",
+    //justifyContent: "flex-end",
+    alignItems: "flex-end",
+    flexDirection: "column",
     width: windowWidth,
     height: (windowHeight * 5) / 100,
     marginTop: 20,
     backgroundColor: "#1D94AD",
+    zIndex: 1,
   },
   footer: {
     width: windowWidth,
