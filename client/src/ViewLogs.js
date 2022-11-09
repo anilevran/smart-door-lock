@@ -53,7 +53,7 @@ export function ViewLogs(props) {
     setAuthed(true);
   };
 
-  const getLastEntry = async () => {
+  const getAllEntries = async () => {
     const body = {
       id: props.route.params.lockId,
     };
@@ -73,9 +73,10 @@ export function ViewLogs(props) {
               const dateMonth = updatedDate.getMonth();
               const dateYear = updatedDate.getFullYear();
               const dateHours = updatedDate.getHours();
-              const dateMinutes = updatedDate.getMinutes();
+              const dateMinutes =
+                (updatedDate.getMinutes() < 10 ? "0" : "") +
+                updatedDate.getMinutes();
               const newLogElement = `${dateDay}/${dateMonth}/${dateYear} - ${dateHours}:${dateMinutes} - ${log.username}`;
-              console.log(newLogElement);
               setAllLogs((oldArray) => [...oldArray, newLogElement]);
             });
           }
@@ -90,7 +91,7 @@ export function ViewLogs(props) {
 
   useEffect(() => {
     getLocks();
-    getLastEntry();
+    getAllEntries();
   }, []);
 
   return (

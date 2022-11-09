@@ -26,6 +26,7 @@ export function LockDetail(props) {
   const [keyName, setkeyName] = useState(null);
   const [isLocked, setLocked] = useState(false);
   const [lastEntry, setLastEntry] = useState("No entries yet");
+  const [deviceStatus, setDeviceStatus] = useState(false);
 
   const getLock = async () => {
     const body = {
@@ -46,31 +47,6 @@ export function LockDetail(props) {
         .catch((err) => {
           console.log(err.response);
           console.log("Cannot Get Locks");
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updateLockStatus = async (lockStatus) => {
-    const body = {
-      id: props.route.params.lockId,
-      isLocked: lockStatus,
-    };
-    try {
-      axios
-        .post("http://192.168.1.91:9000/api/locks/updateLockStatus", body, {
-          headers: {
-            "auth-token": await getValueFor("auth-token"),
-          },
-        })
-        .then(async (result) => {
-          console.log("Updated Lock Status");
-          setLocked(lockStatus);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log("Device action error");
         });
     } catch (error) {
       console.log(error);
@@ -115,12 +91,35 @@ export function LockDetail(props) {
   const handleLockAction = async () => {
     let tempIsLocked = !isLocked;
 
+    const updateLockStatus = async (lockStatus) => {
+      const body = {
+        id: props.route.params.lockId,
+        isLocked: lockStatus,
+      };
+      try {
+        axios
+          .post("http://192.168.1.91:9000/api/locks/updateLockStatus", body, {
+            headers: {
+              "auth-token": await getValueFor("auth-token"),
+            },
+          })
+          .then((result) => {
+            setLocked(lockStatus);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            console.log("Device action error");
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     if (isLocked === false) {
       try {
         await axios
           .get("http://192.168.1.125/lock")
           .then(async (result) => {
-            console.log("device locked");
             await updateLockStatus(true);
           })
           .catch((err) => {
@@ -135,7 +134,6 @@ export function LockDetail(props) {
         await axios
           .get("http://192.168.1.125/unlock")
           .then(async (result) => {
-            console.log("device unlocked");
             await updateLockStatus(false);
           })
           .catch((err) => {
@@ -158,9 +156,6 @@ export function LockDetail(props) {
             "auth-token": await getValueFor("auth-token"),
           },
         })
-        .then((result) => {
-          console.log("Brraa");
-        })
         .catch((err) => {
           console.log("Catch");
         });
@@ -175,9 +170,32 @@ export function LockDetail(props) {
     props.navigation.navigate("Home");
   };
 
+  const intervalCheckDevice = async () => {
+    let interval = setInterval(() => {
+      try {
+        axios
+          .get("http://192.168.1.125/")
+          .then((result) => {
+            if (!deviceStatus) setDeviceStatus(true);
+          })
+          .catch((err) => {
+            if (deviceStatus) setDeviceStatus(false);
+          });
+      } catch (error) {
+        console.log("Error checking device");
+      }
+    }, 5000);
+    return interval;
+  };
+
   useEffect(() => {
     getLock();
     getLastEntry();
+    let interval = intervalCheckDevice();
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
   useEffect(() => {
     getLock();
@@ -201,7 +219,13 @@ export function LockDetail(props) {
             </View>
           </View>
           <View style={styles.body}>
-            <View style={styles.keyNameContainer}>
+            <View
+              style={
+                deviceStatus
+                  ? styles.keyNameContainer
+                  : styles.keyNameContainer2
+              }
+            >
               <Text style={styles.keyLabel}>{keyName}</Text>
             </View>
             <View style={styles.detailContainer}>
@@ -291,7 +315,17 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFA04D",
+    backgroundColor: "green",
+    borderRadius: 30,
+    width: 300,
+    height: "15%",
+    marginLeft: 55,
+  },
+  keyNameContainer2: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "red",
     borderRadius: 30,
     width: 300,
     height: "15%",

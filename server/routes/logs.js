@@ -37,7 +37,6 @@ router.post("/getByLockIdAll", verify, async (req, res) => {
   const lock = await Lock.findById(req.body.id);
   const logFilter = { lockId: lock._id };
   const log = await Log.find(logFilter);
-  console.log(log);
 
   var itemsProcessed = 0;
   const getLogs = async (logTemp) => {
@@ -53,6 +52,9 @@ router.post("/getByLockIdAll", verify, async (req, res) => {
       itemsProcessed++;
 
       if (itemsProcessed === log.length) {
+        logArr.sort((a, b) => {
+          return new Date(a.updatedAt) - new Date(b.updatedAt);
+        });
         res.send(logArr);
       }
     }
@@ -61,12 +63,6 @@ router.post("/getByLockIdAll", verify, async (req, res) => {
   log.forEach((logTemp) => {
     getLogs(logTemp);
   });
-
-  // try {
-  //   res.send(logArr);
-  // } catch (err) {
-  //   res.status(400).send(err);
-  // }
 });
 
 router.post("/setLog", verify, async (req, res) => {

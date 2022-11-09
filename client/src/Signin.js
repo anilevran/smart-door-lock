@@ -20,7 +20,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export function Signin(props) {
   var [email, setEmail] = useState("anil.evran7@gmail.com");
-  var [password, setPassword] = useState("10261026");
+  var [password, setPassword] = useState("12345678");
 
   const handleSignIn = () => {
     try {
