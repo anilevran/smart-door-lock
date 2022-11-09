@@ -1,4 +1,6 @@
-sdl-backend/node_modules
-sdl-backend/.env
-sdl-frontend/node_modules
-sdl-frontend/.expo
+server/node_modules
+server/.env
+client/node_modules
+client/.expo
+client/.expo-shared
+.expo

@@ -34,7 +34,7 @@ export function ViewLogs(props) {
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/locks/getLock", body, {
+        .post("http://192.168.1.91:9000/api/locks/getLock", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -59,7 +59,7 @@ export function ViewLogs(props) {
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/logs/getByLockIdAll", body, {
+        .post("http://192.168.1.91:9000/api/logs/getByLockIdAll", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },

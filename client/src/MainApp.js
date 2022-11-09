@@ -33,7 +33,7 @@ export function MainApp(props) {
   const getLocks = async () => {
     try {
       const result = await axios.get(
-        "http://192.168.1.57:9000/api/locks/getLocks",
+        "http://192.168.1.91:9000/api/locks/getLocks",
         {
           headers: {
             "auth-token": await getValueFor("auth-token"),
@@ -50,7 +50,7 @@ export function MainApp(props) {
   const genQR = async () => {
     try {
       axios
-        .get("http://192.168.1.57:9000/api/locks/findEmptyLock", {
+        .get("http://192.168.1.91:9000/api/locks/findEmptyLock", {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },

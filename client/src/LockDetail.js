@@ -33,7 +33,7 @@ export function LockDetail(props) {
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/locks/getLock", body, {
+        .post("http://192.168.1.91:9000/api/locks/getLock", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -59,7 +59,7 @@ export function LockDetail(props) {
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/locks/updateLockStatus", body, {
+        .post("http://192.168.1.91:9000/api/locks/updateLockStatus", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -83,7 +83,7 @@ export function LockDetail(props) {
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/logs/getByLockId", body, {
+        .post("http://192.168.1.91:9000/api/logs/getByLockId", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
@@ -113,13 +113,15 @@ export function LockDetail(props) {
   };
 
   const handleLockAction = async () => {
+    let tempIsLocked = !isLocked;
+
     if (isLocked === false) {
       try {
-        axios
+        await axios
           .get("http://192.168.1.125/lock")
           .then(async (result) => {
             console.log("device locked");
-            updateLockStatus(true);
+            await updateLockStatus(true);
           })
           .catch((err) => {
             console.log(err.response);
@@ -130,11 +132,11 @@ export function LockDetail(props) {
       }
     } else {
       try {
-        axios
+        await axios
           .get("http://192.168.1.125/unlock")
           .then(async (result) => {
             console.log("device unlocked");
-            updateLockStatus(false);
+            await updateLockStatus(false);
           })
           .catch((err) => {
             console.log(err.response);
@@ -147,21 +149,20 @@ export function LockDetail(props) {
 
     const body = {
       id: props.route.params.lockId,
+      isLocked: tempIsLocked,
     };
     try {
       axios
-        .post("http://192.168.1.57:9000/api/logs/setLog", body, {
+        .post("http://192.168.1.91:9000/api/logs/setLog", body, {
           headers: {
             "auth-token": await getValueFor("auth-token"),
           },
         })
-        .then(async (result) => {
-          console.log("Log Saved Successfully");
-          setLocked(lockStatus);
+        .then((result) => {
+          console.log("Brraa");
         })
         .catch((err) => {
-          console.log(err.response);
-          console.log("Log error");
+          console.log("Catch");
         });
     } catch (error) {
       console.log(error);
@@ -229,7 +230,7 @@ export function LockDetail(props) {
                 onPress={handleLockAction}
               >
                 <Text style={styles.optionText}>
-                  {isLocked === false ? "Lock" : "Unlock"}
+                  {!isLocked ? "Lock" : "Unlock"}
                 </Text>
               </TouchableHighlight>
               <TouchableHighlight

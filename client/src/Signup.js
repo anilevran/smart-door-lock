@@ -26,7 +26,7 @@ export function Signup(props) {
   const handleSignUp = (props) => {
     try {
       axios
-        .post("http://192.168.1.57:9000/api/auth/signup", {
+        .post("http://192.168.1.91:9000/api/auth/signup", {
           email: email,
           password: password,
           username: username,

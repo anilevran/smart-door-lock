@@ -71,12 +71,11 @@ router.post("/getByLockIdAll", verify, async (req, res) => {
 
 router.post("/setLog", verify, async (req, res) => {
   const token = req.header("auth-token");
-  const lock = await Lock.findById(req.body.id);
   const userId = await jwt.decode(token)._id;
 
   let log = new Log({
-    lockId: lock._id,
-    isLocked: lock.isLocked,
+    lockId: req.body.id,
+    isLocked: req.body.isLocked,
     userId: userId,
   });
   try {
@@ -85,6 +84,11 @@ router.post("/setLog", verify, async (req, res) => {
     res.status(400).send(err);
   }
   res.send("Log Saved Successfully");
+});
+
+router.get("/deleteLogs", verify, async (req, res) => {
+  await Log.find().deleteMany();
+  res.send("logs deleted sucessfully");
 });
 
 module.exports = router;
