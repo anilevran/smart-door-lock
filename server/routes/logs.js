@@ -53,7 +53,7 @@ router.post("/getByLockIdAll", verify, async (req, res) => {
 
       if (itemsProcessed === log.length) {
         logArr.sort((a, b) => {
-          return new Date(a.updatedAt) - new Date(b.updatedAt);
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
         res.send(logArr);
       }
