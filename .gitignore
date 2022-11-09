@@ -3,4 +3,3 @@ server/.env
 client/node_modules
 client/.expo
 client/.expo-shared
-.expo/
